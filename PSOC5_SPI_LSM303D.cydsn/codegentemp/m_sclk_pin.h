@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: m_sclk_pin.h  
-* Version 1.70
+* Version 1.80
 *
 * Description:
 *  This file containts Control Register function prototypes and register defines
@@ -8,11 +8,11 @@
 * Note:
 *
 ********************************************************************************
-* Copyright 2008-2010, Cypress Semiconductor Corporation.  All rights reserved.
+* Copyright 2008-2012, Cypress Semiconductor Corporation.  All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions, 
 * disclaimers, and limitations in the end user license agreement accompanying 
 * the software package with which this file was provided.
-********************************************************************************/
+*******************************************************************************/
 
 #if !defined(CY_PINS_m_sclk_pin_H) /* Pins m_sclk_pin_H */
 #define CY_PINS_m_sclk_pin_H
@@ -25,12 +25,13 @@
 /* Check to see if required defines such as CY_PSOC5A are available */
 /* They are defined starting with cy_boot v3.0 */
 #if !defined (CY_PSOC5A)
-    #error Component cy_pins_v1_70 requires cy_boot v3.0 or later
+    #error Component cy_pins_v1_80 requires cy_boot v3.0 or later
 #endif /* (CY_PSOC5A) */
 
 /* APIs are not generated for P15[7:6] */
 #if !(CY_PSOC5A &&\
-	 m_sclk_pin__PORT == 15 && (m_sclk_pin__MASK & 0xC0))
+	 m_sclk_pin__PORT == 15 && ((m_sclk_pin__MASK & 0xC0) != 0))
+
 
 /***************************************
 *        Function Prototypes             
@@ -41,6 +42,7 @@ void    m_sclk_pin_SetDriveMode(uint8 mode) ;
 uint8   m_sclk_pin_ReadDataReg(void) ;
 uint8   m_sclk_pin_Read(void) ;
 uint8   m_sclk_pin_ClearInterrupt(void) ;
+
 
 /***************************************
 *           API Constants        
@@ -60,6 +62,7 @@ uint8   m_sclk_pin_ClearInterrupt(void) ;
 #define m_sclk_pin_MASK               m_sclk_pin__MASK
 #define m_sclk_pin_SHIFT              m_sclk_pin__SHIFT
 #define m_sclk_pin_WIDTH              1u
+
 
 /***************************************
 *             Registers        
@@ -119,7 +122,9 @@ uint8   m_sclk_pin_ClearInterrupt(void) ;
 
 #endif /* Interrupt Registers */
 
-#endif /* End Pins m_sclk_pin_H */
+#endif /* CY_PSOC5A... */
 
-#endif
+#endif /*  CY_PINS_m_sclk_pin_H */
+
+
 /* [] END OF FILE */

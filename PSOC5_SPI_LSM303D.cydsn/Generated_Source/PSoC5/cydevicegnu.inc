@@ -1,7 +1,7 @@
 /*******************************************************************************
 * FILENAME: cydevicegnu.inc
 * OBSOLETE: Do not use this file. Use the _trm version instead.
-* PSoC Creator 2.1 SP1
+* PSoC Creator 2.2 Component Pack 5
 *
 * DESCRIPTION:
 * This file provides all of the address values for the entire PSoC device.

@@ -1,10 +1,10 @@
 /*******************************************************************************
 * File Name: SPIM_PM.c
-* Version 2.30
+* Version 2.40
 *
 * Description:
-*  This file contains the setup, control and status commands to support 
-*  component operations in low power mode.  
+*  This file contains the setup, control and status commands to support
+*  component operations in low power mode.
 *
 * Note:
 *
@@ -15,30 +15,17 @@
 * the software package with which this file was provided.
 *******************************************************************************/
 
-#include "SPIM.h"
+#include "SPIM_PVT.h"
 
-static SPIM_BACKUP_STRUCT SPIM_backup = {
-                                        0u,
-                                        SPIM_BITCTR_INIT,
-                                        #if(CY_UDB_V0)
-                                            SPIM_TX_INIT_INTERRUPTS_MASK,
-                                            SPIM_RX_INIT_INTERRUPTS_MASK
-                                        #endif /* CY_UDB_V0 */
-                                        };
-
-#if (SPIM_TXBUFFERSIZE > 4u)
-
-    extern volatile uint8 SPIM_txBufferRead;
-    extern volatile uint8 SPIM_txBufferWrite;
-    
-#endif /* SPIM_TXBUFFERSIZE > 4u */
-
-#if (SPIM_RXBUFFERSIZE > 4u)
-
-    extern volatile uint8 SPIM_rxBufferRead;
-    extern volatile uint8 SPIM_rxBufferWrite;
-    
-#endif /* SPIM_RXBUFFERSIZE > 4u */
+static SPIM_BACKUP_STRUCT SPIM_backup =
+{
+    SPIM_DISABLED,
+    SPIM_BITCTR_INIT,
+    #if(CY_UDB_V0)
+        SPIM_TX_INIT_INTERRUPTS_MASK,
+        SPIM_RX_INIT_INTERRUPTS_MASK
+    #endif /* CY_UDB_V0 */
+};
 
 
 /*******************************************************************************
@@ -53,7 +40,7 @@ static SPIM_BACKUP_STRUCT SPIM_backup = {
 *
 * Return:
 *  None.
-* 
+*
 * Global Variables:
 *  SPIM_backup - modified when non-retention registers are saved.
 *
@@ -64,13 +51,11 @@ static SPIM_BACKUP_STRUCT SPIM_backup = {
 void SPIM_SaveConfig(void) 
 {
     /* Store Status Mask registers */
-    #if (CY_UDB_V0)     
-    
+    #if(CY_UDB_V0)
+       SPIM_backup.cntrPeriod      = SPIM_COUNTER_PERIOD_REG;
        SPIM_backup.saveSrTxIntMask = SPIM_TX_STATUS_MASK_REG;
        SPIM_backup.saveSrRxIntMask = SPIM_RX_STATUS_MASK_REG;
-       SPIM_backup.cntrPeriod = SPIM_COUNTER_PERIOD_REG;
-       
-    #endif /* CY_UDB_V0 */
+    #endif /* (CY_UDB_V0) */
 }
 
 
@@ -92,20 +77,18 @@ void SPIM_SaveConfig(void)
 *
 * Side Effects:
 *  If this API is called without first calling SaveConfig then in the following
-*  registers will be default values from Customizer: 
+*  registers will be default values from Customizer:
 *  SPIM_STATUS_MASK_REG and SPIM_COUNTER_PERIOD_REG.
 *
 *******************************************************************************/
 void SPIM_RestoreConfig(void) 
 {
     /* Restore the data, saved by SaveConfig() function */
-    #if (CY_UDB_V0)
-    
-        SPIM_TX_STATUS_MASK_REG = SPIM_backup.saveSrTxIntMask;
-        SPIM_RX_STATUS_MASK_REG = SPIM_backup.saveSrRxIntMask;
+    #if(CY_UDB_V0)
         SPIM_COUNTER_PERIOD_REG = SPIM_backup.cntrPeriod;
-        
-    #endif /* CY_UDB_V0 */
+        SPIM_TX_STATUS_MASK_REG = ((uint8) SPIM_backup.saveSrTxIntMask);
+        SPIM_RX_STATUS_MASK_REG = ((uint8) SPIM_backup.saveSrRxIntMask);
+    #endif /* (CY_UDB_V0) */
 }
 
 
@@ -116,10 +99,10 @@ void SPIM_RestoreConfig(void)
 * Summary:
 *  Prepare SPIM Component goes to sleep.
 *
-* Parameters:  
+* Parameters:
 *  None.
 *
-* Return: 
+* Return:
 *  None.
 *
 * Global Variables:
@@ -132,17 +115,9 @@ void SPIM_RestoreConfig(void)
 void SPIM_Sleep(void) 
 {
     /* Save components enable state */
-    if ((SPIM_TX_STATUS_ACTL_REG & SPIM_INT_ENABLE) == SPIM_INT_ENABLE)
-    {
-        SPIM_backup.enableState = 1u;
-    }
-    else /* Components block is disabled */
-    {
-        SPIM_backup.enableState = 0u;
-    }
+    SPIM_backup.enableState = ((uint8) SPIM_IS_ENABLED);
 
     SPIM_Stop();
-
     SPIM_SaveConfig();
 }
 
@@ -154,53 +129,51 @@ void SPIM_Sleep(void)
 * Summary:
 *  Prepare SPIM Component to wake up.
 *
-* Parameters:  
+* Parameters:
 *  None.
 *
-* Return: 
+* Return:
 *  None.
 *
 * Global Variables:
 *  SPIM_backup - used when non-retention registers are restored.
-*  SPIM_txBufferWrite - modified every function call - resets to 
+*  SPIM_txBufferWrite - modified every function call - resets to
 *  zero.
-*  SPIM_txBufferRead - modified every function call - resets to 
+*  SPIM_txBufferRead - modified every function call - resets to
 *  zero.
 *  SPIM_rxBufferWrite - modified every function call - resets to
 *  zero.
 *  SPIM_rxBufferRead - modified every function call - resets to
-*  zero. 
+*  zero.
 *
 * Reentrant:
 *  No.
 *
 *******************************************************************************/
 void SPIM_Wakeup(void) 
-{        
+{
     SPIM_RestoreConfig();
-         
-    #if (SPIM_TXBUFFERSIZE > 4u)
-    
-        SPIM_txBufferRead = 0u;
-        SPIM_txBufferWrite = 0u;
-        
-    #endif /* SPIM_TXBUFFERSIZE > 4u */
-    
-    #if (SPIM_RXBUFFERSIZE > 4u)    
-    
-        SPIM_rxBufferRead = 0u;
+
+    #if(SPIM_RX_SOFTWARE_BUF_ENABLED)
+        SPIM_rxBufferFull  = 0u;
+        SPIM_rxBufferRead  = 0u;
         SPIM_rxBufferWrite = 0u;
-        
-    #endif /* SPIM_RXBUFFERSIZE > 4u */ 
-    
+    #endif /* (SPIM_RX_SOFTWARE_BUF_ENABLED) */
+
+    #if(SPIM_TX_SOFTWARE_BUF_ENABLED)
+        SPIM_txBufferFull  = 0u;
+        SPIM_txBufferRead  = 0u;
+        SPIM_txBufferWrite = 0u;
+    #endif /* (SPIM_TX_SOFTWARE_BUF_ENABLED) */
+
+    /* Clear any data from the RX and TX FIFO */
     SPIM_ClearFIFO();
-    
+
     /* Restore components block enable state */
-    if (SPIM_backup.enableState != 0u)
+    if(0u != SPIM_backup.enableState)
     {
-         /* Components block was enabled */
-         SPIM_Enable();
-    } /* Do nothing if components block was disabled */
+        SPIM_Enable();
+    }
 }
 
 

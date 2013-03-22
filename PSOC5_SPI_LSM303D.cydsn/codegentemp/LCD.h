@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: LCD.h
-* Version 1.70
+* Version 1.80
 *
 * Description:
 *  This header file contains registers and constants associated with the
@@ -41,7 +41,7 @@
 ***************************************/
 
 /* Sleep Mode API Support */
-typedef struct _LCD_backupStruct
+typedef struct
 {
     uint8 enableState;
 } LCD_BACKUP_STRUCT;
@@ -51,23 +51,25 @@ typedef struct _LCD_backupStruct
 *        Function Prototypes
 ***************************************/
 
+void LCD_Init(void) ;
+void LCD_Enable(void) ;
 void LCD_Start(void) ;
 void LCD_Stop(void) ;
 void LCD_WriteControl(uint8 cByte) ;
 void LCD_WriteData(uint8 dByte) ;
-void LCD_PrintString(char8 *string) ;
+void LCD_PrintString(char8 const string[]) ;
 void LCD_Position(uint8 row, uint8 column) ;
 void LCD_PutChar(char8 character) ;
 void LCD_IsReady(void) ;
-void LCD_WrDatNib(uint8 nibble) ;
-void LCD_WrCntrlNib(uint8 nibble) ;
+void LCD_SaveConfig(void) ;
+void LCD_RestoreConfig(void) ;
 void LCD_Sleep(void) ;
 void LCD_Wakeup(void) ;
 
 #if((LCD_CUSTOM_CHAR_SET == LCD_VERTICAL_BG) || \
                 (LCD_CUSTOM_CHAR_SET == LCD_HORIZONTAL_BG))
 
-    void  LCD_LoadCustomFonts(const uint8 * customData)
+    void  LCD_LoadCustomFonts(uint8 const customData[])
                         ;
 
     void  LCD_DrawHorizontalBG(uint8 row, uint8 column, uint8 maxCharacters, uint8 value)
@@ -80,7 +82,7 @@ void LCD_Wakeup(void) ;
 
 #if(LCD_CUSTOM_CHAR_SET == LCD_USER_DEFINED)
 
-    void LCD_LoadCustomFonts(const uint8 * customData)
+    void LCD_LoadCustomFonts(uint8 const customData[])
                             ;
 
 #endif /* ((LCD_CUSTOM_CHAR_SET == LCD_USER_DEFINED) */
@@ -88,13 +90,9 @@ void LCD_Wakeup(void) ;
 #if(LCD_CONVERSION_ROUTINES == 1u)
 
     /* ASCII Conversion Routines */
-    void LCD_PrintHexUint8(uint8 value) ;
-    void LCD_PrintHexUint16(uint16 value) ;
-    void LCD_PrintDecUint16(uint16 value) ;
-
-    #define LCD_PrintNumber(x)       LCD_PrintDecUint16(x)
-    #define LCD_PrintInt8(x)         LCD_PrintHexUint8(x)
-    #define LCD_PrintInt16(x)        LCD_PrintHexUint16(x)
+    void LCD_PrintInt8(uint8 value) ;
+    void LCD_PrintInt16(uint16 value) ;
+    void LCD_PrintNumber(uint16 value) ; 
 
 #endif /* LCD_CONVERSION_ROUTINES == 1u */
 
@@ -106,6 +104,15 @@ void LCD_Wakeup(void) ;
 
 /* On Macro */
 #define LCD_DisplayOn() LCD_WriteControl(LCD_DISPLAY_ON_CURSOR_OFF)
+
+
+/***************************************
+*           Global Variables
+***************************************/
+
+extern uint8 LCD_initVar;
+extern uint8 LCD_enableState;
+extern uint8 const CYCODE LCD_customFonts[64u];
 
 
 /***************************************
@@ -183,12 +190,68 @@ void LCD_Wakeup(void) ;
 #define LCD_PORT_DR_PTR              ( (reg8 *) LCD_LCDPort__DR)
 #define LCD_PORT_PS_REG              (*(reg8 *) LCD_LCDPort__PS)   /* Pin State Register */
 #define LCD_PORT_PS_PTR              ( (reg8 *) LCD_LCDPort__PS)
-#define LCD_PORT_DM0_REG             (*(reg8 *) LCD_LCDPort__DM0)  /* Port Drive Mode 0 */
-#define LCD_PORT_DM0_PTR             ( (reg8 *) LCD_LCDPort__DM0)
-#define LCD_PORT_DM1_REG             (*(reg8 *) LCD_LCDPort__DM1)  /* Port Drive Mode 1 */
-#define LCD_PORT_DM1_PTR             ( (reg8 *) LCD_LCDPort__DM1)
-#define LCD_PORT_DM2_REG             (*(reg8 *) LCD_LCDPort__DM2)  /* Port Drive Mode 2 */
-#define LCD_PORT_DM2_PTR             ( (reg8 *) LCD_LCDPort__DM2)
+
+/* Device specific registers */
+#if (CY_PSOC4)
+
+    #define LCD_PORT_PC_REG (*(reg32 *) LCD_LCDPort__PC)
+    #define LCD_PORT_PC_PTR (*(reg32 *) LCD_LCDPort__PC)
+    
+#else
+
+    #define LCD_PORT_DM0_REG             (*(reg8 *) LCD_LCDPort__DM0)  /* Port Drive Mode 0 */
+    #define LCD_PORT_DM0_PTR             ( (reg8 *) LCD_LCDPort__DM0)
+    #define LCD_PORT_DM1_REG             (*(reg8 *) LCD_LCDPort__DM1)  /* Port Drive Mode 1 */
+    #define LCD_PORT_DM1_PTR             ( (reg8 *) LCD_LCDPort__DM1)
+    #define LCD_PORT_DM2_REG             (*(reg8 *) LCD_LCDPort__DM2)  /* Port Drive Mode 2 */
+    #define LCD_PORT_DM2_PTR             ( (reg8 *) LCD_LCDPort__DM2)
+
+#endif /* CY_PSOC4 */
+
+
+/***************************************
+*       Register Constants
+***************************************/
+
+/* SHIFT must be 1 or 0 */
+#define LCD_PORT_SHIFT               (LCD_LCDPort__SHIFT)
+#define LCD_PORT_MASK                (LCD_LCDPort__MASK)
+
+#if (CY_PSOC4)
+
+    /* Hi-Z Digital is defined by value of "001b" and this should be set for
+    * four data pins in this way we get - 0x00000249. Similar Strong drive
+    * is defibed by "110b" so we get 0x00000DB6.
+    */
+    #define LCD_HIGH_Z_DATA_DM           (0x00000249ul)
+    #define LCD_STRONG_DATA_DM           (0x00000DB6ul)
+    #define LCD_DM_DATA_MASK             (0xFFFul << (LCD_PORT_SHIFT * 3u))
+    
+#else
+
+    /* Drive Mode register values for High Z */
+    #define LCD_HIGH_Z_DM0               (0xFFu)
+    #define LCD_HIGH_Z_DM1               (0x00u)
+    #define LCD_HIGH_Z_DM2               (0x00u)
+
+    /* Drive Mode register values for High Z Analog */
+    #define LCD_HIGH_Z_A_DM0             (0x00u)
+    #define LCD_HIGH_Z_A_DM1             (0x00u)
+    #define LCD_HIGH_Z_A_DM2             (0x00u)
+
+    /* Drive Mode register values for Strong */
+    #define LCD_STRONG_DM0               (0x00u)
+    #define LCD_STRONG_DM1               (0xFFu)
+    #define LCD_STRONG_DM2               (0xFFu)
+
+#endif /* CY_PSOC4 */
+
+/* Pin Masks */
+#define LCD_RS                       ((uint8) (((uint8) 0x20u) << LCD_LCDPort__SHIFT))
+#define LCD_RW                       ((uint8) (((uint8) 0x40u) << LCD_LCDPort__SHIFT))
+#define LCD_E                        ((uint8) (((uint8) 0x10u) << LCD_LCDPort__SHIFT))
+#define LCD_READY_BIT                ((uint8) (((uint8) 0x08u) << LCD_LCDPort__SHIFT))
+#define LCD_DATA_MASK                ((uint8) (((uint8) 0x0Fu) << LCD_LCDPort__SHIFT))
 
 /* These names are obsolete and will be removed in future revisions */
 #define LCD_PORT_DR                  LCD_PORT_DR_REG
@@ -199,34 +262,17 @@ void LCD_Wakeup(void) ;
 
 
 /***************************************
-*       Register Constants
+*       Obsolete function names
 ***************************************/
+#if(LCD_CONVERSION_ROUTINES == 1u)
+    /* This function names are obsolete an they will be removed in future 
+    * revisions of component.
+    */
+    #define LCD_PrintDecUint16(x)   LCD_PrintNumber(x)  
+    #define LCD_PrintHexUint8(x)    LCD_PrintInt8(x)
+    #define LCD_PrintHexUint16(x)   LCD_PrintInt16(x)        
 
-/* SHIFT must be 1 or 0 */
-#define LCD_PORT_SHIFT               LCD_LCDPort__SHIFT
-#define LCD_PORT_MASK                LCD_LCDPort__MASK
-
-/* Drive Mode register values for High Z */
-#define LCD_HIGH_Z_DM0               (0xFFu)
-#define LCD_HIGH_Z_DM1               (0x00u)
-#define LCD_HIGH_Z_DM2               (0x00u)
-
-/* Drive Mode register values for High Z Analog */
-#define LCD_HIGH_Z_A_DM0             (0x00u)
-#define LCD_HIGH_Z_A_DM1             (0x00u)
-#define LCD_HIGH_Z_A_DM2             (0x00u)
-
-/* Drive Mode register values for Strong */
-#define LCD_STRONG_DM0               (0x00u)
-#define LCD_STRONG_DM1               (0xFFu)
-#define LCD_STRONG_DM2               (0xFFu)
-
-/* Pin Masks */
-#define LCD_RS                       (0x20u << LCD_LCDPort__SHIFT)
-#define LCD_RW                       (0x40u << LCD_LCDPort__SHIFT)
-#define LCD_E                        (0x10u << LCD_LCDPort__SHIFT)
-#define LCD_READY_BIT                (0x08u << LCD_LCDPort__SHIFT)
-#define LCD_DATA_MASK                (0x0Fu << LCD_LCDPort__SHIFT)
+#endif /* LCD_CONVERSION_ROUTINES == 1u */
 
 #endif /* CY_CHARLCD_LCD_H */
 

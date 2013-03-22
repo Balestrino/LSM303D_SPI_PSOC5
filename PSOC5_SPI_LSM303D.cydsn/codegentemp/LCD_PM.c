@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: LCD_PM.c
-* Version 1.70
+* Version 1.80
 *
 * Description:
 *  This file provides the API source code for the Static Segment LCD component.
@@ -17,13 +17,7 @@
 #include "LCD.h"
 
 
-void LCD_SaveConfig(void) ;
-void LCD_RestoreConfig(void) ;
-extern void LCD_Enable(void) ;
-
 static LCD_BACKUP_STRUCT LCD_backup;
-
-extern uint8 LCD_enableState;
 
 
 /*******************************************************************************

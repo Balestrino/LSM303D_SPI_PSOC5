@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: cyPm.h
-* Version 3.20
+* Version 3.30
 *
 * Description:
 *  Provides the function definitions for the power management API.
@@ -182,8 +182,8 @@ void CyPmOppsSet(void) ;
 * bitfield.
 *******************************************************************************/
 #if(CY_PSOC3)
-    #define CY_PM_GET_CPU_FREQ_MHZ (cyPmImoFreqReg2Mhz[CY_PM_FASTCLK_IMO_CR_REG & CY_PM_FASTCLK_IMO_CR_FREQ_MASK] / \
-                                   (((CY_PM_CLKDIST_MSTR1_REG & CY_PM_CLKDIST_CPU_DIV_MASK) >> 4u) + 1u))
+    #define CY_PM_GET_CPU_FREQ_MHZ ((uint32)(cyPmImoFreqReg2Mhz[CY_PM_FASTCLK_IMO_CR_REG & CY_PM_FASTCLK_IMO_CR_FREQ_MASK]) / \
+                                   ((uint8)(((CY_PM_CLKDIST_MSTR1_REG & CY_PM_CLKDIST_CPU_DIV_MASK) >> 4u) + 1u)))
 #endif  /* (CY_PSOC3) */
 
 #if(CY_PSOC5)
@@ -211,7 +211,7 @@ void CyPmOppsSet(void) ;
 
 #else
 
-    #define CY_PM_WFI
+    #define CY_PM_WFI           CY_NOP
 
 #endif /* (CY_PSOC5) */
 
@@ -222,11 +222,7 @@ void CyPmOppsSet(void) ;
 *******************************************************************************/
 #if(CY_PSOC3)
 
-    /* FTW interval mask */
-    #define CY_PM_FTW_INTERVAL_MASK    (0xFFu)
-
-    #define PM_ALT_ACT_FTW_INTERVAL(x) \
-        (((x) - CY_PM_FTW_INTERVAL_SHIFT) & CY_PM_FTW_INTERVAL_MASK)
+    #define PM_ALT_ACT_FTW_INTERVAL(x)  ((uint8)((x) - CY_PM_FTW_INTERVAL_SHIFT))
 
 #endif  /* (CY_PSOC3) */
 
@@ -270,6 +266,7 @@ typedef struct cyPmClockBackupStruct
     uint16 clkBusDiv;           /* The clk_bus divider          */
     uint8  pllEnableState;      /* PLL enable state             */
     uint8  xmhzEnableState;     /* XM HZ enable state           */
+    uint8  clkDistDelay;        /* Delay for clk_bus and ACLKs  */
 
 } CY_PM_CLOCK_BACKUP_STRUCT;
 
@@ -318,11 +315,11 @@ typedef struct cyPmBackupStruct
     #endif  /* (CY_PSOC3 || CY_PSOC5LP) */
 
 
-    #if(CY_PSOC3 || CY_PSOC5A)
+    #if(CY_PSOC3 || CY_PSOC5A || CY_PSOC5LP)
 
         uint8 scctData[28u];   /* SC/CT routing registers  */
 
-    #endif  /* (CY_PSOC3 || CY_PSOC5A)  */
+    #endif  /* (CY_PSOC3 || CY_PSOC5A || CY_PSOC5LP) */
 
     #if(CY_PSOC5A)
 
@@ -352,8 +349,7 @@ typedef struct cyPmBackupStruct
     uint8 imoActFreq;       /* Last moment IMO change   */
     uint8 imoActFreq12Mhz;  /* 12 MHz or not            */
 
-    uint8 clkDistDelay;     /* Delay for clk_d_sync and each of ACLK */
-	uint8 boostRefExt;      /* Boost reference selection */
+    uint8 boostRefExt;      /* Boost reference selection */
 
 } CY_PM_BACKUP_STRUCT;
 
@@ -589,7 +585,6 @@ typedef struct cyPmBackupStruct
 #define CY_PM_ILO_CR0_PD_MODE           (0x10u)     /* Power down mode for ILO*/
 #define CY_PM_X32_CR_X32EN              (0x01u)     /* Enable 32kHz OSC       */
 
-#define CY_PM_CTW_INTERVAL_MASK         (0x0Fu)     /* CTW interval mask      */
 #define CY_PM_CTW_IE                    (0x08u)     /* CTW interrupt enable   */
 #define CY_PM_CTW_EN                    (0x04u)     /* CTW enable             */
 #define CY_PM_FTW_IE                    (0x02u)     /* FTW interrupt enable   */
@@ -740,6 +735,20 @@ typedef struct cyPmBackupStruct
 
 /* Boost Control 2: Select external precision reference */
 #define CY_PM_BOOST_CR2_EREFSEL_EXT     (0x08u)
+
+
+/*******************************************************************************
+* Following code are OBSOLETE and must not be used starting from cy_boot 3.30
+*******************************************************************************/
+#if(CY_PSOC3)
+
+    /* Was removed as redundant */
+    #define CY_PM_FTW_INTERVAL_MASK    (0xFFu)
+
+#endif  /* (CY_PSOC3) */
+
+/* Was removed as redundant */
+#define CY_PM_CTW_INTERVAL_MASK         (0x0Fu)
 
 #endif  /* (CY_BOOT_CYPM_H) */
 

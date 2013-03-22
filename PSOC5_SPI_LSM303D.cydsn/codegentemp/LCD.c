@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: LCD.c
-* Version 1.70
+* Version 1.80
 *
 * Description:
 *  This file provides source code for the Character LCD component's API.
@@ -18,17 +18,15 @@
 #include "LCD.h"
 
 
-void LCD_Init(void) ;
-void LCD_Enable(void) ;
+static void LCD_WrDatNib(uint8 nibble) ;
+static void LCD_WrCntrlNib(uint8 nibble) ;
 
-
+/* Stores the state of conponent. Indicates wherewer component is 
+* in enable state or not.
+*/
 uint8 LCD_enableState = 0u;
 
 uint8 LCD_initVar = 0u;
-
-char8 const CYCODE LCD_hex[16u] = "0123456789ABCDEF";
-
-extern uint8 const CYCODE LCD_customFonts[];
 
 
 /*******************************************************************************
@@ -136,7 +134,7 @@ void LCD_Enable(void)
 *  No.
 *
 *******************************************************************************/
-void LCD_Start() 
+void LCD_Start(void) 
 {
     /* If not initialized then perform initialization */
     if(LCD_initVar == 0u)
@@ -167,7 +165,7 @@ void LCD_Start()
 *  No.
 *
 *******************************************************************************/
-void LCD_Stop() 
+void LCD_Stop(void) 
 {
     /* Calls LCD Off Macro */
     LCD_DisplayOff();
@@ -199,16 +197,16 @@ void LCD_Position(uint8 row, uint8 column)
 {
     switch (row)
     {
-        case 0:
+        case (uint8)0:
             LCD_WriteControl(LCD_ROW_0_START + column);
             break;
-        case 1:
+        case (uint8) 1:
             LCD_WriteControl(LCD_ROW_1_START + column);
             break;
-        case 2:
+        case (uint8) 2:
             LCD_WriteControl(LCD_ROW_2_START + column);
             break;
-        case 3:
+        case (uint8) 3:
             LCD_WriteControl(LCD_ROW_3_START + column);
             break;
         default:
@@ -232,16 +230,16 @@ void LCD_Position(uint8 row, uint8 column)
 *  None.
 *
 *******************************************************************************/
-void LCD_PrintString(char8 * string) 
+void LCD_PrintString(char8 const string[]) 
 {
     uint8 indexU8 = 1u;
     char8 current = *string;
 
     /* Until null is reached, print next character */
-    while(current != (char8) '\0')
+    while((char8) '\0' != current)
     {
-        LCD_WriteData(current);
-        current = *(string + indexU8);
+        LCD_WriteData((uint8)current);
+        current = string[indexU8];
         indexU8++;
     }
 }
@@ -265,7 +263,7 @@ void LCD_PrintString(char8 * string)
 *******************************************************************************/
 void LCD_PutChar(char8 character) 
 {
-    LCD_WriteData(character);
+    LCD_WriteData((uint8)character);
 }
 
 
@@ -317,11 +315,10 @@ void LCD_WriteControl(uint8 cByte)
 {
     uint8 nibble;
 
-    nibble = cByte >> LCD_NIBBLE_SHIFT;
-
     LCD_IsReady();
-    nibble &= LCD_NIBBLE_MASK;
 
+    nibble = cByte >> LCD_NIBBLE_SHIFT;
+    
     /* WrCntrlNib(High Nibble) */
     LCD_WrCntrlNib(nibble);
     nibble = cByte & LCD_NIBBLE_MASK;
@@ -348,32 +345,46 @@ void LCD_WriteControl(uint8 cByte)
 *  Changes pins to High-Z.
 *
 *******************************************************************************/
-void LCD_IsReady() 
+void LCD_IsReady(void) 
 {
-    uint8 value = 0u;
+    uint8 value;
 
     /* Clear the LCD port*/
-    LCD_PORT_DR_REG &= ~LCD_PORT_MASK ;
+    LCD_PORT_DR_REG &= ((uint8)(~LCD_PORT_MASK));
 
-    /* Change Port to High-Z Status on data pins */
+    /* PSoC4 has a bit different port/pin organization for setting Drive Modes than
+    * PSoC3/5.
+    */
+    #if (CY_PSOC4)
+        
+        /* Mask off data pins to clear old values out */
+        value = LCD_PORT_PC_REG & ((uint8)(~ LCD_DM_DATA_MASK));
+        /* Load in high Z values for data pins, others unchanged */
+        LCD_PORT_PC_REG = value | LCD_HIGH_Z_DATA_DM;
 
-    /* Mask off data pins to clear old values out */
-    value = LCD_PORT_DM0_REG & ~LCD_DATA_MASK;
-    /* Load in high Z values for data pins, others unchanged */
-    LCD_PORT_DM0_REG = value | (LCD_HIGH_Z_DM0 & LCD_DATA_MASK);
+    #else
+    
+        /* Change Port to High-Z Status on data pins */
 
-    /* Mask off data pins to clear old values out */
-    value = LCD_PORT_DM1_REG & ~LCD_DATA_MASK;
-    /* Load in high Z values for data pins, others unchanged */
-    LCD_PORT_DM1_REG = value | (LCD_HIGH_Z_DM1 & LCD_DATA_MASK);
+        /* Mask off data pins to clear old values out */
+        value = LCD_PORT_DM0_REG & ((uint8)(~LCD_DATA_MASK));
+        /* Load in high Z values for data pins, others unchanged */
+        LCD_PORT_DM0_REG = value | (LCD_HIGH_Z_DM0 & LCD_DATA_MASK);
 
-    /* Mask off data pins to clear old values out */
-    value = LCD_PORT_DM2_REG & ~LCD_DATA_MASK;
-    /* Load in high Z values for data pins, others unchanged */
-    LCD_PORT_DM2_REG = value | (LCD_HIGH_Z_DM2 & LCD_DATA_MASK);
+        /* Mask off data pins to clear old values out */
+        value = LCD_PORT_DM1_REG & ((uint8)(~LCD_DATA_MASK));
+        /* Load in high Z values for data pins, others unchanged */
+        LCD_PORT_DM1_REG = value;
 
+        /* Mask off data pins to clear old values out */
+        value = LCD_PORT_DM2_REG & ((uint8)(~LCD_DATA_MASK));
+        /* Load in high Z values for data pins, others unchanged */
+        LCD_PORT_DM2_REG = value;
+    
+    #endif /* CY_PSOC4 */
+    
     /* Make sure RS is low */
-    LCD_PORT_DR_REG &= ~LCD_RS;
+    LCD_PORT_DR_REG &= ((uint8)(~LCD_RS));
 
     /* Set R/W high to read */
     LCD_PORT_DR_REG |= LCD_RW;
@@ -393,11 +404,8 @@ void LCD_IsReady()
         value = LCD_PORT_PS_REG;
 
         /* Set enable low */
-        LCD_PORT_DR_REG &= ~LCD_E;
+        LCD_PORT_DR_REG &= ((uint8)(~LCD_E));
 
-        /* Allow time for the enable signal to transition */
-        CyDelayUs(0u);
-        
         /* Extract ready bit */
         value &= LCD_READY_BIT;
 
@@ -408,34 +416,43 @@ void LCD_IsReady()
         CyDelayUs(1u);
 
         /* Set enable low */
-        LCD_PORT_DR_REG &= ~LCD_E;
+        LCD_PORT_DR_REG &= ((uint8)(~LCD_E));
 
         /* Repeat until bit 4 is not zero. */
 
     } while (value != 0u);
 
     /* Set R/W low to write */
-    LCD_PORT_DR_REG &= ~LCD_RW;
+    LCD_PORT_DR_REG &= ((uint8)(~LCD_RW));
 
     /* Clear the LCD port*/
-    LCD_PORT_DR_REG &= ~LCD_PORT_MASK ;
+    LCD_PORT_DR_REG &= ((uint8)(~LCD_PORT_MASK));
 
-    /* Change Port to Output (Strong) on data pins */
+    #if (CY_PSOC4)
+        
+        /* Mask off data pins to clear old values out */
+        value = LCD_PORT_PC_REG & ((uint32)(~ LCD_DM_DATA_MASK));
+        /* Load in high Z values for data pins, others unchanged */
+        LCD_PORT_PC_REG = value | LCD_STRONG_DATA_DM;
 
-    /* Mask off data pins to clear high z values out */
-    value = LCD_PORT_DM0_REG & (~LCD_DATA_MASK);
-    /* Load in high Z values for data pins, others unchanged */
-    LCD_PORT_DM0_REG = value | (LCD_STRONG_DM0 & LCD_DATA_MASK);
+    #else
 
-    /* Mask off data pins to clear high z values out */
-    value = LCD_PORT_DM1_REG & (~LCD_DATA_MASK);
-    /* Load in high Z values for data pins, others unchanged */
-    LCD_PORT_DM1_REG = value | (LCD_STRONG_DM1 & LCD_DATA_MASK);
+        /* Change Port to Output (Strong) on data pins */
+        /* Mask off data pins to clear high z values out. Configure data pins 
+        * to Strong Drive, others unchanged.
+        */
+        LCD_PORT_DM0_REG &= ((uint8)(~LCD_DATA_MASK));
+        /* Mask off data pins to clear high z values out */
+        value = LCD_PORT_DM1_REG & ((uint8)(~LCD_DATA_MASK));
+        /* Configure data pins to Strong Drive, others unchanged */
+        LCD_PORT_DM1_REG = value | (LCD_STRONG_DM1 & LCD_DATA_MASK);
 
-    /* Mask off data pins to clear high z values out */
-    value = LCD_PORT_DM2_REG & (~LCD_DATA_MASK);
-    /* Load in high Z values for data pins, others unchanged */
-    LCD_PORT_DM2_REG = value | (LCD_STRONG_DM2 & LCD_DATA_MASK);
+        /* Mask off data pins to clear high z values out */
+        value = LCD_PORT_DM2_REG & ((uint8)(~LCD_DATA_MASK));
+        /* Configure data pins to Strong Drive, others unchanged */
+        LCD_PORT_DM2_REG = value | (LCD_STRONG_DM2 & LCD_DATA_MASK);
+    
+    #endif /* CY_PSOC4 */
 }
 
 
@@ -454,26 +471,31 @@ void LCD_IsReady()
 *  None.
 *
 *******************************************************************************/
-void LCD_WrDatNib(uint8 nibble) 
+static void LCD_WrDatNib(uint8 nibble) 
 {
     LCD_IsReady();
 
     /* RS shoul be low to select data register */
     LCD_PORT_DR_REG |= LCD_RS;
     /* Reset RW for write operation */
-    LCD_PORT_DR_REG &= ~LCD_RW;
+    LCD_PORT_DR_REG &= ((uint8)(~LCD_RW));
 
     /* Two following lines of code will provide us with 40ns delay */
     /* Clear data pins */
-    LCD_PORT_DR_REG &= ~LCD_DATA_MASK;
+    LCD_PORT_DR_REG &= ((uint8)(~LCD_DATA_MASK));
 
     /* Write in data, bring E high*/
-    LCD_PORT_DR_REG |= (LCD_E | (nibble << LCD_PORT_SHIFT));
+    #if(0u != LCD_PORT_SHIFT) /* MISRA forbids shift by 0 so need to handle that */
+        LCD_PORT_DR_REG |= 
+            (LCD_E | ((uint8)(((uint8) nibble) << LCD_PORT_SHIFT)));
+    #else
+        LCD_PORT_DR_REG |= (LCD_E | nibble);
+    #endif /* (0u != LCD_PORT_SHIFT) */
 
     /* Minimum of 230 ns delay */
     CyDelayUs(1u);
 
-    LCD_PORT_DR_REG &= ~LCD_E;
+    LCD_PORT_DR_REG &= ((uint8)(~LCD_E));
 }
 
 
@@ -492,29 +514,34 @@ void LCD_WrDatNib(uint8 nibble)
 *  None.
 *
 *******************************************************************************/
-void LCD_WrCntrlNib(uint8 nibble) 
+static void LCD_WrCntrlNib(uint8 nibble) 
 {
     /* RS and RW shoul be low to select instruction register and  write operation respectively */
-    LCD_PORT_DR_REG &= ~(LCD_RS | LCD_RW);
+    LCD_PORT_DR_REG &= ((uint8)(~(LCD_RS | LCD_RW)));
 
     /* Two following lines of code will give provide ua with 40ns delay */
     /* Clear data pins */
-    LCD_PORT_DR_REG &= ~LCD_DATA_MASK;
+    LCD_PORT_DR_REG &= ((uint8)(~LCD_DATA_MASK));
 
     /* Write control data and set enable signal */
-    LCD_PORT_DR_REG |= (LCD_E | (nibble << LCD_PORT_SHIFT));
+    #if(0u != LCD_PORT_SHIFT) /* MISRA forbids shift by 0 so need to handle that */
+        LCD_PORT_DR_REG |= 
+            (LCD_E | ((uint8)(((uint8) nibble) << LCD_PORT_SHIFT)));
+    #else
+        LCD_PORT_DR_REG |= (LCD_E | nibble);
+    #endif /* (0u != LCD_PORT_SHIFT) */
 
     /* Minimum of 230 ns delay */
     CyDelayUs(1u);
 
-    LCD_PORT_DR_REG &= ~LCD_E;
+    LCD_PORT_DR_REG &= ((uint8)(~LCD_E));
 }
 
 
 #if(LCD_CONVERSION_ROUTINES == 1u)
 
     /*******************************************************************************
-    *  Function Name: LCD_PrintHexUint8
+    *  Function Name: LCD_PrintInt8
     ********************************************************************************
     *
     * Summary:
@@ -527,15 +554,17 @@ void LCD_WrCntrlNib(uint8 nibble)
     *  None.
     *
     *******************************************************************************/
-    void LCD_PrintHexUint8(uint8 value) 
+    void LCD_PrintInt8(uint8 value) 
     {
+        static char8 const CYCODE LCD_hex[16u] = "0123456789ABCDEF";
+        
         LCD_PutChar((char8) LCD_hex[value >> LCD_BYTE_UPPER_NIBBLE_SHIFT]);
         LCD_PutChar((char8) LCD_hex[value & LCD_BYTE_LOWER_NIBBLE_MASK]);
     }
 
 
     /*******************************************************************************
-    *  Function Name: LCD_PrintHexUint16
+    *  Function Name: LCD_PrintInt16
     ********************************************************************************
     *
     * Summary:
@@ -548,15 +577,15 @@ void LCD_WrCntrlNib(uint8 nibble)
     *  None.
     *
     *******************************************************************************/
-    void LCD_PrintHexUint16(uint16 value) 
+    void LCD_PrintInt16(uint16 value) 
     {
-        LCD_PrintHexUint8(value >> LCD_U16_UPPER_BYTE_SHIFT);
-        LCD_PrintHexUint8(value & LCD_U16_LOWER_BYTE_MASK);
+        LCD_PrintInt8((uint8)(value >> LCD_U16_UPPER_BYTE_SHIFT));
+        LCD_PrintInt8((uint8)(value & LCD_U16_LOWER_BYTE_MASK));
     }
 
 
     /*******************************************************************************
-    *  Function Name: LCD_PrintDecUint16
+    *  Function Name: LCD_PrintNumber
     ********************************************************************************
     *
     * Summary:
@@ -569,39 +598,43 @@ void LCD_WrCntrlNib(uint8 nibble)
     *  None.
     *
     *******************************************************************************/
-    void LCD_PrintDecUint16(uint16 value) 
+    void LCD_PrintNumber(uint16 value) 
     {
 
         char8 number[LCD_NUMBER_OF_REMAINDERS];
         char8 temp[LCD_NUMBER_OF_REMAINDERS];
 
-        uint8 index = 0u;
-        uint8 numDigits = 0u;
-
+        uint8 digIndex = 0u;
+        uint8 numDigits;
 
         /* Load these in reverse order */
         while(value >= LCD_TEN)
         {
-            temp[index] = (value % LCD_TEN) + '0';
+            temp[digIndex] = (value % LCD_TEN) + '0';
             value /= LCD_TEN;
-            index++;
+            digIndex++;
         }
 
-        temp[index] = (value % LCD_TEN) + '0';
-        numDigits = index;
+        temp[digIndex] = (value % LCD_TEN) + '0';
+        numDigits = digIndex;
 
-        /* While index is greater than or equal to zero */
-        while (index != 0xFFu)
+        /* While index is greater than or equal to zero copy number
+        * from temporary array to number[].
+        */
+        while (digIndex != 0u)
         {
-            number[numDigits - index] = temp[index];
-            index--;
+            number[numDigits - digIndex] = temp[digIndex];
+            digIndex--;
         }
+        
+        /* Copy last digit */
+        number[numDigits] = temp[0u];
 
         /* Null Termination */
-        number[numDigits + 1u] = (char8) 0;
+        number[numDigits + 1u] = (char8) '\0';
 
         /* Print out number */
-        LCD_PrintString(number);
+        LCD_PrintString(&number[0u]);
     }
 
 #endif /* LCD_CONVERSION_ROUTINES == 1u */
