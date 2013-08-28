@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <blockRegMap version="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://cypress.com/xsd/cyblockregmap cyblockregmap.xsd" xmlns="http://cypress.com/xsd/cyblockregmap">
+  <block name="not_4" BASE="0x0" SIZE="0x0" desc="" visible="true" />
+  <block name="not_5" BASE="0x0" SIZE="0x0" desc="" visible="true" />
+  <block name="Pin_5" BASE="0x0" SIZE="0x0" desc="" visible="true" />
+  <block name="not_3" BASE="0x0" SIZE="0x0" desc="" visible="true" />
+  <block name="Pin_4" BASE="0x0" SIZE="0x0" desc="" visible="true" />
   <block name="not_1" BASE="0x0" SIZE="0x0" desc="" visible="true" />
   <block name="not_2" BASE="0x0" SIZE="0x0" desc="" visible="true" />
-  <block name="not_3" BASE="0x0" SIZE="0x0" desc="" visible="true" />
-  <block name="Pin_2" BASE="0x0" SIZE="0x0" desc="" visible="true" />
-  <block name="Pin_3" BASE="0x0" SIZE="0x0" desc="" visible="true" />
-  <block name="Pin_4" BASE="0x0" SIZE="0x0" desc="" visible="true" />
-  <block name="not_4" BASE="0x0" SIZE="0x0" desc="" visible="true" />
+  <block name="not_6" BASE="0x0" SIZE="0x0" desc="" visible="true" />
+  <block name="Pin_6" BASE="0x0" SIZE="0x0" desc="" visible="true" />
+  <block name="not_8" BASE="0x0" SIZE="0x0" desc="" visible="true" />
+  <block name="Pin_7" BASE="0x0" SIZE="0x0" desc="" visible="true" />
+  <block name="not_7" BASE="0x0" SIZE="0x0" desc="" visible="true" />
   <block name="ZeroTerminal_3" BASE="0x0" SIZE="0x0" desc="" visible="true" />
   <block name="Timer_1" BASE="0x0" SIZE="0x0" desc="" visible="true">
     <block name="VirtualMux_2" BASE="0x0" SIZE="0x0" desc="" visible="true" />
@@ -24,13 +29,13 @@
       <field name="CTRL_TMODE" from="3" to="2" access="RW" resetVal="" desc="Trigger Mode" />
       <field name="CTRL_IC" from="1" to="0" access="RW" resetVal="" desc="Interrupt Count" />
     </register>
-    <register name="Timer_1_STATUS_MASK" address="0x40006584" bitWidth="8" desc="UDB Status bits Interrupt Mask Enable Register">
+    <register name="Timer_1_STATUS_MASK" address="0x40006585" bitWidth="8" desc="UDB Status bits Interrupt Mask Enable Register">
       <field name="TIMER_STS_TC" from="0" to="0" access="R" resetVal="" desc="Enables the Interrupt on TC" />
       <field name="TIMER_STS_CAPT" from="1" to="1" access="R" resetVal="" desc="Enables the Interrupt on Capture" />
       <field name="TIMER_STS_FIFO_FULL" from="2" to="2" access="R" resetVal="" desc="FIFO Full Status " />
       <field name="TIMER_STS_FIFO_NEMPTY" from="3" to="3" access="R" resetVal="" desc="FIFO Empty status " />
     </register>
-    <register name="Timer_1_STATUS_AUX_CTRL" address="0x40006594" bitWidth="8" desc="UDB Auxilliary Control Register">
+    <register name="Timer_1_STATUS_AUX_CTRL" address="0x40006595" bitWidth="8" desc="UDB Auxilliary Control Register">
       <field name="FIFO0_CLR" from="0" to="0" access="RW" resetVal="" desc="FIFO0 clear">
         <value name="E_FIFO_CLR_0" value="0" desc="Normal FIFO operation" />
         <value name="E_FIFO_CLR_1" value="1" desc="Clear FIFO state" />
@@ -58,10 +63,6 @@
     </register>
   </block>
   <block name="timer_clock" BASE="0x0" SIZE="0x0" desc="" visible="true" />
-  <block name="not_5" BASE="0x0" SIZE="0x0" desc="" visible="true" />
-  <block name="Pin_5" BASE="0x0" SIZE="0x0" desc="" visible="true" />
-  <block name="not_6" BASE="0x0" SIZE="0x0" desc="" visible="true" />
-  <block name="m_sclk_pin" BASE="0x0" SIZE="0x0" desc="" visible="true" />
   <block name="SPIM" BASE="0x0" SIZE="0x0" desc="" visible="true">
     <block name="VirtualMux_2" BASE="0x0" SIZE="0x0" desc="" visible="true" />
     <block name="VirtualMux_3" BASE="0x0" SIZE="0x0" desc="" visible="true" />
@@ -73,26 +74,29 @@
   <block name="LCD" BASE="0x0" SIZE="0x0" desc="" visible="true">
     <block name="LCDPort" BASE="0x0" SIZE="0x0" desc="" visible="true" />
   </block>
-  <block name="ZeroTerminal_1" BASE="0x0" SIZE="0x0" desc="" visible="true" />
-  <block name="m_miso_pin" BASE="0x0" SIZE="0x0" desc="" visible="true" />
-  <block name="m_mosi_pin" BASE="0x0" SIZE="0x0" desc="" visible="true" />
   <block name="UART_1" BASE="0x0" SIZE="0x0" desc="UART" visible="true">
     <block name="VirtualMux_1" BASE="0x0" SIZE="0x0" desc="" visible="true" />
     <block name="BUART" BASE="0x0" SIZE="0x0" desc="" visible="true" />
-    <register name="TX_UART_1_TX_DATA" address="0x40006444" bitWidth="8" desc="TX Data Register" />
-    <register name="TX_UART_1_TX_STATUS" address="0x40006464" bitWidth="8" desc="TX status register">
+    <register name="TX_UART_1_TX_DATA" address="0x40006445" bitWidth="8" desc="TX Data Register" />
+    <register name="TX_UART_1_TX_STATUS" address="0x40006465" bitWidth="8" desc="TX status register">
       <field name="UART_1_TX_STS_COMPLETE" from="0" to="0" access="R" resetVal="" desc="" />
       <field name="UART_1_TX_STS_FIFO_EMPTY" from="1" to="1" access="R" resetVal="" desc="" />
       <field name="UART_1_TX_STS_FIFO_FULL" from="2" to="2" access="R" resetVal="" desc="" />
       <field name="UART_1_TX_STS_FIFO_NOT_FULL" from="3" to="3" access="R" resetVal="" desc="" />
     </register>
   </block>
-  <block name="demux_1" BASE="0x0" SIZE="0x0" desc="" visible="true" />
-  <block name="SS" BASE="0x0" SIZE="0x0" desc="" visible="true">
-    <register name="SS_CONTROL_REG" address="0x40006471" bitWidth="8" desc="" />
-  </block>
-  <block name="Pin_1" BASE="0x0" SIZE="0x0" desc="" visible="true" />
+  <block name="m_sclk_pin" BASE="0x0" SIZE="0x0" desc="" visible="true" />
+  <block name="ZeroTerminal_1" BASE="0x0" SIZE="0x0" desc="" visible="true" />
+  <block name="m_miso_pin" BASE="0x0" SIZE="0x0" desc="" visible="true" />
+  <block name="m_mosi_pin" BASE="0x0" SIZE="0x0" desc="" visible="true" />
   <block name="Clock_1" BASE="0x0" SIZE="0x0" desc="" visible="true" />
+  <block name="Pin_1" BASE="0x0" SIZE="0x0" desc="" visible="true" />
+  <block name="Pin_2" BASE="0x0" SIZE="0x0" desc="" visible="true" />
+  <block name="Pin_3" BASE="0x0" SIZE="0x0" desc="" visible="true" />
+  <block name="SS" BASE="0x0" SIZE="0x0" desc="" visible="true">
+    <register name="SS_CONTROL_REG" address="0x40006473" bitWidth="8" desc="" />
+  </block>
   <block name="Tx_1" BASE="0x0" SIZE="0x0" desc="" visible="true" />
   <block name="ZeroTerminal_2" BASE="0x0" SIZE="0x0" desc="" visible="true" />
+  <block name="demux_1" BASE="0x0" SIZE="0x0" desc="" visible="true" />
 </blockRegMap>

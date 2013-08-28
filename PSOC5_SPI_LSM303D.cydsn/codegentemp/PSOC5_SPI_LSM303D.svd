@@ -12,7 +12,7 @@
       <baseAddress>0x40006504</baseAddress>
       <addressBlock>
         <offset>0</offset>
-        <size>0x91</size>
+        <size>0x92</size>
         <usage>registers</usage>
       </addressBlock>
       <registers>
@@ -83,7 +83,7 @@
         <register>
           <name>Timer_1_STATUS_MASK</name>
           <description>UDB Status bits Interrupt Mask Enable Register</description>
-          <addressOffset>0x80</addressOffset>
+          <addressOffset>0x81</addressOffset>
           <size>8</size>
           <access>read-write</access>
           <resetValue>0</resetValue>
@@ -122,7 +122,7 @@
         <register>
           <name>Timer_1_STATUS_AUX_CTRL</name>
           <description>UDB Auxilliary Control Register</description>
-          <addressOffset>0x90</addressOffset>
+          <addressOffset>0x91</addressOffset>
           <size>8</size>
           <access>read-write</access>
           <resetValue>0</resetValue>
@@ -249,7 +249,7 @@
     <peripheral>
       <name>UART_1</name>
       <description>UART</description>
-      <baseAddress>0x40006444</baseAddress>
+      <baseAddress>0x40006445</baseAddress>
       <addressBlock>
         <offset>0</offset>
         <size>0x21</size>
@@ -309,7 +309,7 @@
     <peripheral>
       <name>SS</name>
       <description>No description available</description>
-      <baseAddress>0x40006471</baseAddress>
+      <baseAddress>0x40006473</baseAddress>
       <addressBlock>
         <offset>0</offset>
         <size>0x1</size>

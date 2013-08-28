@@ -692,6 +692,21 @@
               <FileType>1</FileType>
               <FilePath>.\Generated_Source\PSoC5\Timer_1_PM.c</FilePath>
             </File>
+            <File>
+              <FileName>Pin_6_aliases.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Generated_Source\PSoC5\Pin_6_aliases.h</FilePath>
+            </File>
+            <File>
+              <FileName>Pin_6.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Generated_Source\PSoC5\Pin_6.c</FilePath>
+            </File>
+            <File>
+              <FileName>Pin_6.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Generated_Source\PSoC5\Pin_6.h</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
@@ -1385,6 +1400,21 @@
               <FileName>Timer_1_PM.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Generated_Source\PSoC5\Timer_1_PM.c</FilePath>
+            </File>
+            <File>
+              <FileName>Pin_6_aliases.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Generated_Source\PSoC5\Pin_6_aliases.h</FilePath>
+            </File>
+            <File>
+              <FileName>Pin_6.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Generated_Source\PSoC5\Pin_6.c</FilePath>
+            </File>
+            <File>
+              <FileName>Pin_6.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Generated_Source\PSoC5\Pin_6.h</FilePath>
             </File>
           </Files>
         </Group>

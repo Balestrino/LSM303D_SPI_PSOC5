@@ -58,7 +58,10 @@ void main()
     start_acc(1);
     start_acc(2);
     start_acc(3);
+    
     start_acc(4);
+    start_acc(5);
+    start_acc(6);
     
 
     while(1u){
@@ -66,20 +69,23 @@ void main()
         
         
 		read_acc(0);
-        CyDelay(1);
+        //CyDelay(300);
         read_acc(1);
 	    //CyDelay(300);
         read_acc(2);
 	    //CyDelay(300);
         read_acc(3);
 	    //CyDelay(300);
-        //read_acc(4);
+        read_acc(4);
 	    //CyDelay(300);
+        read_acc(5);
+        //CyDelay(300);
+        read_acc(6);
         
         //Timer_1_WriteCounter(0);
-        Timer_1_Start();
-        CyDelay(5);
-        uint16 counter = Timer_1_ReadCounter();
+        //Timer_1_Start();
+        //CyDelay(5);
+        //uint16 counter = Timer_1_ReadCounter();
         //Timer_1_WriteCounter(0);
         //Timer_1_Stop();
         LCD_Position(0u,0u);

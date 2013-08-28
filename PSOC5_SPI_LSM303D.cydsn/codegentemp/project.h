@@ -41,6 +41,10 @@
 #include <Pin_5_aliases.h>
 #include <Pin_5.h>
 #include <Timer_1.h>
+#include <Pin_6_aliases.h>
+#include <Pin_6.h>
+#include <Pin_7_aliases.h>
+#include <Pin_7.h>
 #include <SPIM_IntClock.h>
 #include <LCD_LCDPort_aliases.h>
 #include <LCD_LCDPort.h>

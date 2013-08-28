@@ -1,5 +1,5 @@
 /*******************************************************************************
-* File Name: Pin_6.c  
+* File Name: Pin_7.c  
 * Version 1.90
 *
 * Description:
@@ -15,15 +15,15 @@
 *******************************************************************************/
 
 #include "cytypes.h"
-#include "Pin_6.h"
+#include "Pin_7.h"
 
 /* APIs are not generated for P15[7:6] on PSoC 5 */
 #if !(CY_PSOC5A &&\
-	 Pin_6__PORT == 15 && ((Pin_6__MASK & 0xC0) != 0))
+	 Pin_7__PORT == 15 && ((Pin_7__MASK & 0xC0) != 0))
 
 
 /*******************************************************************************
-* Function Name: Pin_6_Write
+* Function Name: Pin_7_Write
 ********************************************************************************
 *
 * Summary:
@@ -36,15 +36,15 @@
 *  None
 *  
 *******************************************************************************/
-void Pin_6_Write(uint8 value) 
+void Pin_7_Write(uint8 value) 
 {
-    uint8 staticBits = (Pin_6_DR & (uint8)(~Pin_6_MASK));
-    Pin_6_DR = staticBits | ((uint8)(value << Pin_6_SHIFT) & Pin_6_MASK);
+    uint8 staticBits = (Pin_7_DR & (uint8)(~Pin_7_MASK));
+    Pin_7_DR = staticBits | ((uint8)(value << Pin_7_SHIFT) & Pin_7_MASK);
 }
 
 
 /*******************************************************************************
-* Function Name: Pin_6_SetDriveMode
+* Function Name: Pin_7_SetDriveMode
 ********************************************************************************
 *
 * Summary:
@@ -57,14 +57,14 @@ void Pin_6_Write(uint8 value)
 *  None
 *
 *******************************************************************************/
-void Pin_6_SetDriveMode(uint8 mode) 
+void Pin_7_SetDriveMode(uint8 mode) 
 {
-	CyPins_SetPinDriveMode(Pin_6_0, mode);
+	CyPins_SetPinDriveMode(Pin_7_0, mode);
 }
 
 
 /*******************************************************************************
-* Function Name: Pin_6_Read
+* Function Name: Pin_7_Read
 ********************************************************************************
 *
 * Summary:
@@ -78,17 +78,17 @@ void Pin_6_SetDriveMode(uint8 mode)
 *  Returns the current value of the Digital Port as a right justified number
 *  
 * Note:
-*  Macro Pin_6_ReadPS calls this function. 
+*  Macro Pin_7_ReadPS calls this function. 
 *  
 *******************************************************************************/
-uint8 Pin_6_Read(void) 
+uint8 Pin_7_Read(void) 
 {
-    return (Pin_6_PS & Pin_6_MASK) >> Pin_6_SHIFT;
+    return (Pin_7_PS & Pin_7_MASK) >> Pin_7_SHIFT;
 }
 
 
 /*******************************************************************************
-* Function Name: Pin_6_ReadDataReg
+* Function Name: Pin_7_ReadDataReg
 ********************************************************************************
 *
 * Summary:
@@ -101,17 +101,17 @@ uint8 Pin_6_Read(void)
 *  Returns the current value assigned to the Digital Port's data output register
 *  
 *******************************************************************************/
-uint8 Pin_6_ReadDataReg(void) 
+uint8 Pin_7_ReadDataReg(void) 
 {
-    return (Pin_6_DR & Pin_6_MASK) >> Pin_6_SHIFT;
+    return (Pin_7_DR & Pin_7_MASK) >> Pin_7_SHIFT;
 }
 
 
 /* If Interrupts Are Enabled for this Pins component */ 
-#if defined(Pin_6_INTSTAT) 
+#if defined(Pin_7_INTSTAT) 
 
     /*******************************************************************************
-    * Function Name: Pin_6_ClearInterrupt
+    * Function Name: Pin_7_ClearInterrupt
     ********************************************************************************
     * Summary:
     *  Clears any active interrupts attached to port and returns the value of the 
@@ -124,9 +124,9 @@ uint8 Pin_6_ReadDataReg(void)
     *  Returns the value of the interrupt status register
     *  
     *******************************************************************************/
-    uint8 Pin_6_ClearInterrupt(void) 
+    uint8 Pin_7_ClearInterrupt(void) 
     {
-        return (Pin_6_INTSTAT & Pin_6_MASK) >> Pin_6_SHIFT;
+        return (Pin_7_INTSTAT & Pin_7_MASK) >> Pin_7_SHIFT;
     }
 
 #endif /* If Interrupts Are Enabled for this Pins component */ 

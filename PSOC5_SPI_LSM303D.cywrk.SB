@@ -13,7 +13,7 @@
 <v>Output</v>
 </TreeKeys>
 <TreeStates>
-<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\Source Files\main.c">
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D.cydwr">
 <ExpandedNodeIds>
 <v>PSOC5_SPI_LSM303D</v>
 <v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D</v>
@@ -87,6 +87,14 @@
 <v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\Generated_Source\PSoC5\Pin_5\Pin_5.c</v>
 <v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\Generated_Source\PSoC5\Pin_5\Pin_5.h</v>
 <v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\Generated_Source\PSoC5\Pin_5\Pin_5_aliases.h</v>
+<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\Generated_Source\PSoC5\Pin_6</v>
+<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\Generated_Source\PSoC5\Pin_6\Pin_6.c</v>
+<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\Generated_Source\PSoC5\Pin_6\Pin_6.h</v>
+<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\Generated_Source\PSoC5\Pin_6\Pin_6_aliases.h</v>
+<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\Generated_Source\PSoC5\Pin_7</v>
+<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\Generated_Source\PSoC5\Pin_7\Pin_7.c</v>
+<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\Generated_Source\PSoC5\Pin_7\Pin_7.h</v>
+<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\Generated_Source\PSoC5\Pin_7\Pin_7_aliases.h</v>
 <v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\Generated_Source\PSoC5\SPIM</v>
 <v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\Generated_Source\PSoC5\SPIM\SPIM.c</v>
 <v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\Generated_Source\PSoC5\SPIM\SPIM.h</v>
@@ -215,6 +223,7 @@
 <v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\Pin_3.lst</v>
 <v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\Pin_4.lst</v>
 <v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\Pin_5.lst</v>
+<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\Pin_6.lst</v>
 <v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\SPIM.lst</v>
 <v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\SPIM_INT.lst</v>
 <v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\SPIM_IntClock.lst</v>
@@ -235,49 +244,7 @@
 <VisibleNodeIds>
 <v>PSOC5_SPI_LSM303D</v>
 <v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\Clock_1.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\Cm3Start.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\core_cm3.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\CyBootAsmGnu.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\CyDmac.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\cyfitter_cfg.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\CyFlash.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\CyLib.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\cyPm.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\CySpc.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\cyutils.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\LCD.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\LCD_LCDPort.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\LCD_PM.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\m_miso_pin.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\m_mosi_pin.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\m_sclk_pin.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\main.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\Pin_1.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\Pin_2.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\Pin_3.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\Pin_4.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\Pin_5.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\SPIM.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\SPIM_INT.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\SPIM_IntClock.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\SPIM_PM.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\SS.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\Timer_1.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\Timer_1_PM.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\UART_1.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\UART_1_BOOT.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\UART_1_INT.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\Listing Files\UART_1_PM.lst</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\PSOC5_SPI_LSM303D.elf</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\PSOC5_SPI_LSM303D.hex</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\CortexM3\ARM_GCC_441\Debug\PSOC5_SPI_LSM303D.map</v>
 <v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D.rpt</v>
-<v>PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D\PSOC5_SPI_LSM303D_timing.html</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 </TreeStates>
