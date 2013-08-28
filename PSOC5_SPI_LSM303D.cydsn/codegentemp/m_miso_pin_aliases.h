@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: m_miso_pin.h  
-* Version 1.80
+* Version 1.90
 *
 * Description:
 *  This file containts Control Register function prototypes and register defines

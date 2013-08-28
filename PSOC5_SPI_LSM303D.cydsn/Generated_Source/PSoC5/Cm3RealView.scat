@@ -1,6 +1,6 @@
 ;********************************************************************************
-;* File Name: Cm3RealView.scat  
-;* Version 3.30
+;* File Name: Cm3RealView.scat
+;* Version 3.40
 ;*
 ;*  Description:
 ;*  This Linker Descriptor file describes the memory layout of the PSoC5
@@ -21,9 +21,9 @@
 ;*
 ;*
 ;********************************************************************************
-;* Copyright 2008-2012, Cypress Semiconductor Corporation.  All rights reserved.
-;* You may use this file only in accordance with the license, terms, conditions, 
-;* disclaimers, and limitations in the end user license agreement accompanying 
+;* Copyright 2008-2013, Cypress Semiconductor Corporation.  All rights reserved.
+;* You may use this file only in accordance with the license, terms, conditions,
+;* disclaimers, and limitations in the end user license agreement accompanying
 ;* the software package with which this file was provided.
 ;********************************************************************************/
 
@@ -48,6 +48,11 @@ LOAD_ROM 0 (262144 - 0)
     ISRVECTORS (0x20000000 - (65536 / 2)) UNINIT
     {
         * (.ramvectors)
+    }
+
+    NOINIT_DATA +0 UNINIT
+    {
+        * (.noinit)
     }
 
     DATA +0

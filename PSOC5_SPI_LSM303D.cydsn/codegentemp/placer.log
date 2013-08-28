@@ -4,9 +4,9 @@
 
 #Version:            1.1
 
-#Build Date:         Dec  5 2012 10:19:42
+#Build Date:         Mar 26 2013 11:48:29
 
-#File Generated:     Mar 22 2013 10:33:26
+#File Generated:     Jul 25 2013 16:48:56
 
 #Purpose:            
 
@@ -18,7 +18,7 @@ Executing : C:\Program Files (x86)\Cypress\PSoC Creator\2.2\PSoC Creator\bin/sjp
 
 		Softjin Techologies Placer, Version 1.1
 
-Build Date : Dec  5 2012	10:22:46
+Build Date : Mar 26 2013	11:50:26
 
 D2004: Option and Settings Summary
 =============================================================
@@ -44,18 +44,18 @@ Phase 2
 Phase 3
 
 Design Statistics after Packing
-    Number of Combinational MCs 	:	14
-    Number of Sequential MCs    	:	18
-    Number of DPs               	:	3
-    Number of Controls          	:	2
-    Number of Status            	:	3
-    Number of SyncCells         	:	0
+    Number of Combinational MCs 	:	16
+    Number of Sequential MCs    	:	21
+    Number of DPs               	:	5
+    Number of Controls          	:	3
+    Number of Status            	:	4
+    Number of SyncCells         	:	1
     Number of count7cells       	:	1
 
 Device Utilization Summary after Packing
-    Macrocells                  :	32/192
-    UDBS                        :	6/24
-    IOs                         :	15/72
+    Macrocells                  :	37/192
+    UDBS                        :	8/24
+    IOs                         :	16/72
 
 
 D2088: Phase 3, elapsed time : 0.0 (sec)
@@ -81,7 +81,7 @@ analysis after routing.
 ======================================================================
 Number of clocks: 7
 Clock: Clock_1              | Frequency:  41.7 MHz | Target:   0.9 MHz
-Clock: CyBUS_CLK            | Frequency: N/A       | Target:  24.0 MHz
+Clock: CyBUS_CLK            | Frequency:  41.7 MHz | Target:  24.0 MHz
 Clock: CyILO                | Frequency: N/A       | Target:   0.0 MHz
 Clock: CyIMO                | Frequency: N/A       | Target:   3.0 MHz
 Clock: CyMASTER_CLK         | Frequency: N/A       | Target:  24.0 MHz
@@ -92,15 +92,15 @@ Clock: SPIM_IntClock        | Frequency:  60.3 MHz | Target:   2.0 MHz
                      End of Clock Summary
 ######################################################################
 
-D2088: Phase 6, elapsed time : 0.0 (sec)
+D2088: Phase 6, elapsed time : 0.1 (sec)
 
 Phase 7
 ######################################################################
                      Clock Summary 
 ======================================================================
 Number of clocks: 7
-Clock: Clock_1              | Frequency:  43.8 MHz | Target:   0.9 MHz
-Clock: CyBUS_CLK            | Frequency: N/A       | Target:  24.0 MHz
+Clock: Clock_1              | Frequency:  40.3 MHz | Target:   0.9 MHz
+Clock: CyBUS_CLK            | Frequency:  41.7 MHz | Target:  24.0 MHz
 Clock: CyILO                | Frequency: N/A       | Target:   0.0 MHz
 Clock: CyIMO                | Frequency: N/A       | Target:   3.0 MHz
 Clock: CyMASTER_CLK         | Frequency: N/A       | Target:  24.0 MHz
@@ -113,18 +113,18 @@ Clock: SPIM_IntClock        | Frequency:  61.0 MHz | Target:   2.0 MHz
 D2088: Phase 7, elapsed time : 0.2 (sec)
 
 Final Design Statistics
-    Number of Combinational MCs 	:	14
-    Number of Sequential MCs    	:	18
-    Number of DPs               	:	3
-    Number of Controls          	:	2
-    Number of Status            	:	3
-    Number of SyncCells         	:	0
+    Number of Combinational MCs 	:	16
+    Number of Sequential MCs    	:	21
+    Number of DPs               	:	5
+    Number of Controls          	:	3
+    Number of Status            	:	4
+    Number of SyncCells         	:	1
     Number of count7cells       	:	1
-    Number of IOs       	:	15
+    Number of IOs       	:	16
 
 Device Utilization Summary
-    Macrocells                  :	32/192
-    IOs                         :	15/72
+    Macrocells                  :	37/192
+    IOs                         :	16/72
 
 
 
@@ -141,13 +141,13 @@ analysis after routing.
                      Clock Summary 
 ======================================================================
 Number of clocks: 7
-Clock: Clock_1              | Frequency:  43.8 MHz | Target:   1.0 MHz
-Clock: CyBUS_CLK            | Frequency: N/A       | Target:  24.0 MHz
+Clock: Clock_1              | Frequency:  38.2 MHz | Target:   1.0 MHz
+Clock: CyBUS_CLK            | Frequency:  41.7 MHz | Target:  26.3 MHz
 Clock: CyILO                | Frequency: N/A       | Target:   0.0 MHz
 Clock: CyIMO                | Frequency: N/A       | Target:   3.0 MHz
 Clock: CyMASTER_CLK         | Frequency: N/A       | Target:  24.0 MHz
 Clock: CyPLL_OUT            | Frequency: N/A       | Target:  24.0 MHz
-Clock: SPIM_IntClock        | Frequency:  61.0 MHz | Target:   2.2 MHz
+Clock: SPIM_IntClock        | Frequency:  58.8 MHz | Target:   2.2 MHz
 
 ======================================================================
                      End of Clock Summary
@@ -158,5 +158,5 @@ D2088: Phase 8, elapsed time : 0.0 (sec)
 
 D2054: Placement of the design completed successfully
 
-I2076: Total run-time: 1.0 sec.
+I2076: Total run-time: 1.1 sec.
 

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 //operation codes for Control registers
-#define RCR 0x80    //Read Control Register
+#define RCR 0x80    //Read Control Register 0x80
 #define WCR 0x00    //Write Control Register
 
 #define ADDR_MASK        0x80
@@ -16,35 +16,14 @@
 
 uint8 ReadControlRegister(uint8 opcode, uint8 address);
 void WriteControlRegister(uint8 opcode,uint8 address,uint8 dta);
-
+void start_acc(uint8 n);
+void read_acc(uint8 n);
+void check_lsm(uint8 n);
+uint8 Read1Byte();
+uint8 Write1Byte(uint8 ucData);
 
 void main()
 {
-    uint8 i = 0u;
-    uint8 value = 0;
-    uint8 low, high;
-    uint16 two_c = 0;
-    
-    uint8 low2, high2;
-    uint16 two_c2 = 0;
-    
-    int inc = 0;
-    int dir = 1;
-    char OutputString[7];
-    char OutputString2[7];
-    uint8 ch;           /* Data sent on the serial port */
-    
-    int sign; 
-    int sign2;
-    
-    int hundreds; 
-    int tens; 
-    int units; 
-    int accX;
-    
-    uint16 dec_value;
-    
-    
     /* Software buffers use internal interrupt functionality to interact with
     * hardware buffers. Thus global interrupt enable command should be called 
     */
@@ -60,401 +39,120 @@ void main()
 
     /* We need to start Character LCD, SPI Master and Slave components */
     LCD_Start();
+    LCD_ClearDisplay();
+    
     SPIM_Start();
     SPIM_ClearRxBuffer();
 	SPIM_ClearTxBuffer();
 	SPIM_ClearFIFO();
     
 
-    CyDelay(15);//Wait for it to finish P-O-S-T
+    CyDelay(35);//Wait for it to finish P-O-S-T
+
+    // check LSM code response
+    // check_lsm(0);
+ 
+   
+    //Start accel
+    start_acc(0);
+    start_acc(1);
+    start_acc(2);
+    start_acc(3);
+    start_acc(4);
+    
+
+    while(1u){
+           
+        
+        
+		read_acc(0);
+        CyDelay(1);
+        read_acc(1);
+	    //CyDelay(300);
+        read_acc(2);
+	    //CyDelay(300);
+        read_acc(3);
+	    //CyDelay(300);
+        //read_acc(4);
+	    //CyDelay(300);
+        
+        //Timer_1_WriteCounter(0);
+        Timer_1_Start();
+        CyDelay(5);
+        uint16 counter = Timer_1_ReadCounter();
+        //Timer_1_WriteCounter(0);
+        //Timer_1_Stop();
+        LCD_Position(0u,0u);
+        LCD_PrintInt16(counter);
+
+        CyDelay(1000);
+    }   
+
+}
+// ########################################################################################
+// ########################################################################################
+// ########################################################################################
+// ########################################################################################
 
 
-    // ---------- SS #1 ------------
-    SS_Write(0);
+
+void check_lsm(uint8 n)
+{
+    int value;
+    char OutputString[7];
+    
+    SS_Write(n);
     CyDelay(15);
-    value=ReadControlRegister(RCR,0x0F);
+    
+    
+    Write1Byte(0x0F);
+	SPIM_ClearRxBuffer();
+	value = Read1Byte();
+    
+    //value = ReadControlRegister(RCR,0x0F);
 	CyDelay(15);
     
 	UART_1_PutString("\r\n");
-    UART_1_PutString("#1 is 0x");
+    UART_1_PutString("#");
+    sprintf(OutputString, "%i", n);
+    UART_1_PutString(OutputString);
+    UART_1_PutString(" ...");
+    
     sprintf(OutputString, "%02x", value);
     UART_1_PutString(OutputString);
     UART_1_PutString("\r\n");
-    CyDelay(100);
     
-    // ---------- SS #2 ------------
-    SS_Write(1);
-    CyDelay(15);
-    value=ReadControlRegister(RCR,0x0F);
-    CyDelay(15);
-    
-    UART_1_PutString("#2 is 0x");
-    sprintf(OutputString, "%02x", value);
-    UART_1_PutString(OutputString);
-    UART_1_PutString("\r\n");
-    CyDelay(100);
-    
-    // ---------- SS #3 ------------
-    SS_Write(2);
-    CyDelay(15);
-    value=ReadControlRegister(RCR,0x0F);
-    CyDelay(15);
-    
-    UART_1_PutString("#3 is 0x");
-    sprintf(OutputString, "%02x", value);
-    UART_1_PutString(OutputString);
-    UART_1_PutString("\r\n");
-    CyDelay(100);
-    
-    
-    // ---------- SS #4 ------------
-    SS_Write(3);
-    CyDelay(15);
-    value=ReadControlRegister(RCR,0x0F);
-    CyDelay(15);
-    
-    UART_1_PutString("#4 is 0x");
-    sprintf(OutputString, "%02x", value);
-    UART_1_PutString(OutputString);
-    UART_1_PutString("\r\n");
-    CyDelay(100);
-    UART_1_PutString("\r\n");
-    // ------------------------------
-    
+    LCD_Position(0u,0u);
+    LCD_PrintString(OutputString);
     
     CyDelay(1000);
-    
-    SPIM_ClearRxBuffer();
-	SPIM_ClearTxBuffer();
-	SPIM_ClearFIFO();
-    
-    LCD_ClearDisplay();
-    
-    //Start accel
-    SS_Write(0);   // select SS #1
+}
+
+void start_acc(uint8 n)
+{
+    SS_Write(n);
     CyDelay(10);
     WriteControlRegister(WCR, 0x20, 0x67);
     CyDelay(10);
-    
-    SS_Write(1);   // select SS #2
-    CyDelay(10);
-    WriteControlRegister(WCR, 0x20, 0x67);
-    CyDelay(10);
-    
-    SS_Write(2);   // select SS #3
-    CyDelay(10);
-    WriteControlRegister(WCR, 0x20, 0x67);
-    CyDelay(10);
-    
-    SS_Write(3);   // select SS #4
-    CyDelay(10);
-    WriteControlRegister(WCR, 0x20, 0x67);
-    CyDelay(10);
-    
-    
-    while(1u){
+}
 
-        low = 0;
-        high = 0;
-        two_c = 0;
-        strcpy(OutputString, "");
 
-		
-	   
-        // ACC #1 -----------------------------
-        SS_Write(0x00);   // select SS #2
-        CyDelay(5);
-        LCD_Position(0u,0u);
-        LCD_PrintString(" #");
-        
-		// READ X
-		
-        low = ReadControlRegister(RCR,LSM303D_OUT_X_L_A);    // Low
-        CyDelay(5);
-        high = ReadControlRegister(RCR,LSM303D_OUT_X_H_A);    // High
-        
-        
-        
-        two_c = (low << 8 | high);
-         sign = low >> 7; 
 
-           if(sign != 0)   // negative result, form two's complement 
-           { 
-              two_c ^= 0xFFFF;  // low = low XOR 0xFF
-              two_c ++; 
-              sign = 1; 
-           } 
-            
-           //two_c >>= 1;      // make into whole degrees 
-
-        sprintf(OutputString, "%d", two_c);
-        UART_1_PutString("1,");
-        if (sign == 1) { UART_1_PutString("-"); }
-        if (sign == 0) { UART_1_PutString("+"); }
-        UART_1_PutString(OutputString);
-		
-		low = 0;
-        high = 0;
-        two_c = 0;
-        strcpy(OutputString, "");
-		
-		
-		
-		// READ Y
-
-		low = ReadControlRegister(RCR,LSM303D_OUT_Y_L_A);    // Low
-        CyDelay(5);
-        high = ReadControlRegister(RCR,LSM303D_OUT_Y_H_A);    // High
+void read_acc (uint8 n)
+{
+        //uint8 i = 0u;
+        uint8 value = 0;
+        uint8 low, high;
+        uint16 two_c = 0;
+        char OutputString[7];
+        int sign;
         
-        two_c = (low << 8 | high);
-         sign = low >> 7; 
-
-           if(sign != 0)   // negative result, form two's complement 
-           { 
-              two_c ^= 0xFFFF;  // low = low XOR 0xFF
-              two_c ++; 
-              sign = 1; 
-           } 
-            
-           //two_c >>= 1;      // make into whole degrees 
-
-        sprintf(OutputString, "%d", two_c);
-        UART_1_PutString(",");
-        if (sign == 1) { UART_1_PutString("-"); }
-        if (sign == 0) { UART_1_PutString("+"); }
-        UART_1_PutString(OutputString);
-		
-		low = 0;
-        high = 0;
-        two_c = 0;
-        strcpy(OutputString, "");
-		
-		// --------
-		
-		
-		
-		// READ Z
-		low = ReadControlRegister(RCR,LSM303D_OUT_Z_L_A);    // Low
-        CyDelay(5);
-        high = ReadControlRegister(RCR,LSM303D_OUT_Z_H_A);    // High
+        //uint8 low2, high2;
+        //uint16 two_c2 = 0;
         
-        two_c = (low << 8 | high);
-         sign = low >> 7; 
-
-           if(sign != 0)   // negative result, form two's complement 
-           { 
-              two_c ^= 0xFFFF;  // low = low XOR 0xFF
-              two_c ++; 
-              sign = 1; 
-           } 
-            
-           //two_c >>= 1;      // make into whole degrees 
-
-        sprintf(OutputString, "%d", two_c);
-        UART_1_PutString(",");
-        if (sign == 1) { UART_1_PutString("-"); }
-        if (sign == 0) { UART_1_PutString("+"); }
-        UART_1_PutString(OutputString);
-		
-        UART_1_PutString("\r\n");
-        
-        low = high = two_c = 0;
-        strcpy(OutputString, "");
- 
- 
-		
-		
-        // ACC #2 -----------------------------
-        SS_Write(0x02);   // select SS #3
-        CyDelay(5);
-        
-        LCD_Position(0u,0u);
-        
-        LCD_PrintString("  #");
-                
-        low = ReadControlRegister(RCR,LSM303D_OUT_X_L_A);    // Low
-        CyDelay(10);
-        high = ReadControlRegister(RCR,LSM303D_OUT_X_H_A);    // High
-        
-        two_c = (low << 8 | high);
-         sign = low >> 7; 
-
-           if(sign != 0)   // negative result, form two's complement 
-           { 
-              two_c ^= 0xFFFF;  // low = low XOR 0xFF
-              two_c++; 
-              sign = 1; 
-           } 
-            
-           //two_c >>= 1;      // make into whole degrees 
-
-        sprintf(OutputString, "%d", two_c);
-        UART_1_PutString("2,");
-        if (sign == 1) { UART_1_PutString("-"); }
-        if (sign == 0) { UART_1_PutString("+"); }
-        UART_1_PutString(OutputString);
-        
-        low = high = two_c = 0;
         strcpy(OutputString, "");
         
-        // READ Y
-
-		low = ReadControlRegister(RCR,LSM303D_OUT_Y_L_A);    // Low
-        CyDelay(5);
-        high = ReadControlRegister(RCR,LSM303D_OUT_Y_H_A);    // High
-        
-        two_c = (low << 8 | high);
-         sign = low >> 7; 
-
-           if(sign != 0)   // negative result, form two's complement 
-           { 
-              two_c ^= 0xFFFF;  // low = low XOR 0xFF
-              two_c ++; 
-              sign = 1; 
-           } 
-            
-           //two_c >>= 1;      // make into whole degrees 
-
-        sprintf(OutputString, "%d", two_c);
-        UART_1_PutString(",");
-        if (sign == 1) { UART_1_PutString("-"); }
-        if (sign == 0) { UART_1_PutString("+"); }
-        UART_1_PutString(OutputString);
-		
-		low = 0;
-        high = 0;
-        two_c = 0;
-        strcpy(OutputString, "");
-		
-		// --------
-		
-		
-		
-		// READ Z
-		low = ReadControlRegister(RCR,LSM303D_OUT_Z_L_A);    // Low
-        CyDelay(5);
-        high = ReadControlRegister(RCR,LSM303D_OUT_Z_H_A);    // High
-        
-        two_c = (low << 8 | high);
-         sign = low >> 7; 
-
-           if(sign != 0)   // negative result, form two's complement 
-           { 
-              two_c ^= 0xFFFF;  // low = low XOR 0xFF
-              two_c ++; 
-              sign = 1; 
-           } 
-            
-           //two_c >>= 1;      // make into whole degrees 
-
-        sprintf(OutputString, "%d", two_c);
-        UART_1_PutString(",");
-        if (sign == 1) { UART_1_PutString("-"); }
-        if (sign == 0) { UART_1_PutString("+"); }
-        UART_1_PutString(OutputString);
-		
-        UART_1_PutString("\r\n");
-        
-        low = high = two_c = 0;
-        strcpy(OutputString, "");
-		
-		
-        // ACC #3 -----------------------------
-        SS_Write(0x03);   // select SS #4
-        CyDelay(5);
-        LCD_Position(0u,0u);
-        
-        LCD_PrintString("   #");
-                
-        low = ReadControlRegister(RCR,LSM303D_OUT_X_L_A);    // Low
-        CyDelay(10);
-        high = ReadControlRegister(RCR,LSM303D_OUT_X_H_A);    // High
-        
-        two_c = (low << 8 | high);
-         sign = low >> 7; 
-
-           if(sign != 0)   // negative result, form two's complement 
-           { 
-              two_c ^= 0xFFFF;  // low = low XOR 0xFF
-              two_c++; 
-              sign = 1; 
-           } 
-            
-           //two_c >>= 1;      // make into whole degrees 
-
-        sprintf(OutputString, "%d", two_c);
-        UART_1_PutString("3,");
-        if (sign == 1) { UART_1_PutString("-"); }
-        if (sign == 0) { UART_1_PutString("+"); }
-        UART_1_PutString(OutputString);
-        
-        low = high = two_c = 0;
-		
-		// READ Y
-
-		low = ReadControlRegister(RCR,LSM303D_OUT_Y_L_A);    // Low
-        CyDelay(5);
-        high = ReadControlRegister(RCR,LSM303D_OUT_Y_H_A);    // High
-        
-        two_c = (low << 8 | high);
-         sign = low >> 7; 
-
-           if(sign != 0)   // negative result, form two's complement 
-           { 
-              two_c ^= 0xFFFF;  // low = low XOR 0xFF
-              two_c ++; 
-              sign = 1; 
-           } 
-            
-           //two_c >>= 1;      // make into whole degrees 
-
-        sprintf(OutputString, "%d", two_c);
-        UART_1_PutString(",");
-        if (sign == 1) { UART_1_PutString("-"); }
-        if (sign == 0) { UART_1_PutString("+"); }
-        UART_1_PutString(OutputString);
-		
-		low = 0;
-        high = 0;
-        two_c = 0;
-        strcpy(OutputString, "");
-		
-		// --------
-		
-		
-		
-		// READ Z
-		low = ReadControlRegister(RCR,LSM303D_OUT_Z_L_A);    // Low
-        CyDelay(5);
-        high = ReadControlRegister(RCR,LSM303D_OUT_Z_H_A);    // High
-        
-        two_c = (low << 8 | high);
-         sign = low >> 7; 
-
-           if(sign != 0)   // negative result, form two's complement 
-           { 
-              two_c ^= 0xFFFF;  // low = low XOR 0xFF
-              two_c ++; 
-              sign = 1; 
-           } 
-            
-           //two_c >>= 1;      // make into whole degrees 
-
-        sprintf(OutputString, "%d", two_c);
-        UART_1_PutString(",");
-        if (sign == 1) { UART_1_PutString("-"); }
-        if (sign == 0) { UART_1_PutString("+"); }
-        UART_1_PutString(OutputString);
-		
-        UART_1_PutString("\r\n");
-        
-        low = high = two_c = 0;
-        strcpy(OutputString, "");
-	
-		
-        
-        // ACC #4 -----------------------------
-        SS_Write(0x00);   // select SS #1
+        SS_Write(n);   // select SS
         CyDelay(5);
         
         LCD_Position(0u,0u);
@@ -464,15 +162,14 @@ void main()
         CyDelay(5);
         high = ReadControlRegister(RCR,LSM303D_OUT_X_H_A);    // High
         
-        two_c = (low << 8 | high);
-        //two_c = (high << 8 | low) >> 4;
+        two_c = (high << 8 | low);
 
         LCD_Position(1u,0u);
-        LCD_PrintInt8(low);
-        LCD_Position(1u,2u);
         LCD_PrintInt8(high);
+        LCD_Position(1u,2u);
+        LCD_PrintInt8(low);
 
-        sign = low >> 7; 
+        sign = high >> 7; 
 
            if(sign != 0)   // negative result, form two's complement 
            { 
@@ -482,9 +179,14 @@ void main()
            } 
             
            //two_c >>= 1;      // make into whole degrees 
-            
+        
+        sprintf(OutputString, "%i", n);
+        UART_1_PutString("#");
+        UART_1_PutString(OutputString);
+        UART_1_PutString(",");
+        
         sprintf(OutputString, "%d", two_c);
-        UART_1_PutString("4,");
+        
         if (sign == 1) { UART_1_PutString("-"); }
         if (sign == 0) { UART_1_PutString("+"); }
         UART_1_PutString(OutputString);
@@ -493,6 +195,8 @@ void main()
         high = 0;
         two_c = 0;
         strcpy(OutputString, "");
+
+        
         
         // READ Y
 
@@ -500,8 +204,13 @@ void main()
         CyDelay(5);
         high = ReadControlRegister(RCR,LSM303D_OUT_Y_H_A);    // High
         
-        two_c = (low << 8 | high);
-         sign = low >> 7; 
+        LCD_Position(1u,5u);
+        LCD_PrintInt8(high);
+        LCD_Position(1u,7u);
+        LCD_PrintInt8(low);
+        
+        two_c = (high << 8 | low);
+        sign = high >> 7; 
 
            if(sign != 0)   // negative result, form two's complement 
            { 
@@ -532,8 +241,13 @@ void main()
         CyDelay(5);
         high = ReadControlRegister(RCR,LSM303D_OUT_Z_H_A);    // High
         
-        two_c = (low << 8 | high);
-         sign = low >> 7; 
+        LCD_Position(1u,10u);
+        LCD_PrintInt8(high);
+        LCD_Position(1u,12u);
+        LCD_PrintInt8(low);
+        
+        two_c = (high << 8 | low);
+        sign = high >> 7; 
 
            if(sign != 0)   // negative result, form two's complement 
            { 
@@ -555,10 +269,10 @@ void main()
         low = high = two_c = 0;
         strcpy(OutputString, "");
 		
+       
+        
 		UART_1_PutString("\r\n");
-    }
-      
-}    
+}
 
 
 // This function reads data from Control Register
@@ -568,6 +282,8 @@ uint8 ReadControlRegister(uint8 opcode, uint8 address)
       uint8 controlreg;    
     
       SPIM_WriteByte(opcode | address );   
+      //SPIM_WriteByte(address ); 
+      
          while(!(SPIM_ReadStatus() & SPIM_STS_TX_FIFO_EMPTY));
  
          
@@ -575,11 +291,11 @@ uint8 ReadControlRegister(uint8 opcode, uint8 address)
         while(!(SPIM_ReadStatus() & SPIM_STS_SPI_DONE));
 
                            
-      controlreg=SPIM_ReadByte();   //dummy read
+      //controlreg=SPIM_ReadByte();   //dummy read
       controlreg=SPIM_ReadByte(); // real data
 
       return controlreg;
-   }//End of RCR
+   }
    
 void WriteControlRegister(uint8 opcode,uint8 address,uint8 dta){
 
@@ -611,5 +327,24 @@ int fromHexStr(const char *s) {
 	return n;
 }
 
+uint8 Read1Byte()
+{
+	SPIM_ClearRxBuffer();
+	Write1Byte(0x00);
+	return SPIM_ReadByte();
+}
+ 
+uint8 Write1Byte(uint8 ucData)
+{
+	uint8 ucStatus = 0;
+	while (!(SPIM_ReadStatus() & SPIM_STS_TX_FIFO_EMPTY))
+	{
+	};
+	SPIM_WriteByte(ucData);
+	while (!(SPIM_ReadStatus() & SPIM_STS_SPI_DONE))
+	{
+	};
+}
+ 
 
 /* [] END OF FILE */

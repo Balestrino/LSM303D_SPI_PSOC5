@@ -662,6 +662,36 @@
               <FileType>5</FileType>
               <FilePath>.\Generated_Source\PSoC5\SPIM_IntClock.h</FilePath>
             </File>
+            <File>
+              <FileName>Pin_5_aliases.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Generated_Source\PSoC5\Pin_5_aliases.h</FilePath>
+            </File>
+            <File>
+              <FileName>Pin_5.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Generated_Source\PSoC5\Pin_5.c</FilePath>
+            </File>
+            <File>
+              <FileName>Pin_5.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Generated_Source\PSoC5\Pin_5.h</FilePath>
+            </File>
+            <File>
+              <FileName>Timer_1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Generated_Source\PSoC5\Timer_1.c</FilePath>
+            </File>
+            <File>
+              <FileName>Timer_1.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Generated_Source\PSoC5\Timer_1.h</FilePath>
+            </File>
+            <File>
+              <FileName>Timer_1_PM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Generated_Source\PSoC5\Timer_1_PM.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
@@ -1325,6 +1355,36 @@
               <FileName>SPIM_IntClock.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Generated_Source\PSoC5\SPIM_IntClock.h</FilePath>
+            </File>
+            <File>
+              <FileName>Pin_5_aliases.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Generated_Source\PSoC5\Pin_5_aliases.h</FilePath>
+            </File>
+            <File>
+              <FileName>Pin_5.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Generated_Source\PSoC5\Pin_5.c</FilePath>
+            </File>
+            <File>
+              <FileName>Pin_5.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Generated_Source\PSoC5\Pin_5.h</FilePath>
+            </File>
+            <File>
+              <FileName>Timer_1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Generated_Source\PSoC5\Timer_1.c</FilePath>
+            </File>
+            <File>
+              <FileName>Timer_1.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Generated_Source\PSoC5\Timer_1.h</FilePath>
+            </File>
+            <File>
+              <FileName>Timer_1_PM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Generated_Source\PSoC5\Timer_1_PM.c</FilePath>
             </File>
           </Files>
         </Group>

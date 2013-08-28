@@ -22,3 +22,24 @@ Project : PSOC5_SPI_LSM303D
 		cy_boot	v 3.20	v 3.30
 
 
+Last Modified Date & Time: 07/04/2013 18:18:39
+
+Project : PSOC5_SPI_LSM303D
+		Schematic : TopDesign/TopDesign.cysch
+
+		m_miso_pin	v 1.80	v 1.90
+		m_mosi_pin	v 1.80	v 1.90
+		m_sclk_pin	v 1.80	v 1.90
+		Tx_1	v 1.80	v 1.90
+		Pin_1	v 1.80	v 1.90
+		Pin_2	v 1.80	v 1.90
+		Pin_3	v 1.80	v 1.90
+		Pin_4	v 1.80	v 1.90
+		LCD	v 1.80	v 1.90
+
+Project : PSOC5_SPI_LSM303D
+		Design Wide APIs
+
+		cy_boot	v 3.30	v 3.40
+
+

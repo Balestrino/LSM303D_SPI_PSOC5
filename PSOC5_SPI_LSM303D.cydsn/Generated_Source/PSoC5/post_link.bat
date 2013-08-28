@@ -15,5 +15,5 @@ move "%~1\%~2\%~n3.hex" "%~1\%~2\%~n3.ihx"
 @IF %errorlevel% NEQ 0 EXIT /b %errorlevel% 
 CD /D "C:\Keil\UV4"
 @IF %errorlevel% NEQ 0 EXIT /b %errorlevel% 
-IF NOT EXIST "C:\Users\Tore\Desktop\LSM303D\LSM303D_SPI_PSOC5\PSOC5_SPI_LSM303D.cydsn\PSOC5_SPI_LSM303D.svd" rem "C:\Users\Tore\Desktop\LSM303D\LSM303D_SPI_PSOC5\PSOC5_SPI_LSM303D.cydsn\PSOC5_SPI_LSM303D.sfr"
+IF NOT EXIST "C:\Users\SB\Dropbox\CentroPiaggio\LSM303D\LSM303D_SPI_PSOC5\PSOC5_SPI_LSM303D.cydsn\PSOC5_SPI_LSM303D.svd" rem "C:\Users\SB\Dropbox\CentroPiaggio\LSM303D\LSM303D_SPI_PSOC5\PSOC5_SPI_LSM303D.cydsn\PSOC5_SPI_LSM303D.sfr"
 @IF %errorlevel% NEQ 0 EXIT /b %errorlevel% 

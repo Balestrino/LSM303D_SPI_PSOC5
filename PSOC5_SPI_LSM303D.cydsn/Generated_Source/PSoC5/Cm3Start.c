@@ -1,12 +1,12 @@
 /*******************************************************************************
 * File Name: Cm3Start.c
-* Version 3.30
+* Version 3.40
 *
 *  Description:
 *  Startup code for the ARM CM3.
 *
 ********************************************************************************
-* Copyright 2008-2012, Cypress Semiconductor Corporation. All rights reserved.
+* Copyright 2008-2013, Cypress Semiconductor Corporation. All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
 * the software package with which this file was provided.
@@ -19,9 +19,9 @@
 #include "CyDmac.h"
 #include "cyfitter.h"
 
-
 #define NUM_INTERRUPTS              32u
 #define NUM_VECTORS                 (CYINT_IRQ_BASE+NUM_INTERRUPTS)
+#define NUM_ROM_VECTORS             4u
 #define NVIC_APINT                  ((reg32 *) CYREG_NVIC_APPLN_INTR)
 #define NVIC_CFG_CTRL               ((reg32 *) CYREG_NVIC_CFG_CONTROL)
 #define NVIC_APINT_PRIGROUP_3_5     0x00000400u  /* Priority group 3.5 split */
@@ -37,10 +37,20 @@ CY_ISR(IntDefaultHandler);
 void Reset(void);
 CY_ISR(IntDefaultHandler);
 
+#if defined(__ARMCC_VERSION)
+    #define INITIAL_STACK_POINTER (cyisraddress)(uint32)&Image$$ARM_LIB_STACK$$ZI$$Limit
+#elif defined (__GNUC__)
+    #define INITIAL_STACK_POINTER __cs3_stack
+#endif  /* (__ARMCC_VERSION) */
+
+/* Global variables */
+CY_NOINIT static uint32 cySysNoInitDataValid;
+
 
 /*******************************************************************************
 * Default Ram Interrupt Vector table storage area. Must be 256-byte aligned.
 *******************************************************************************/
+
 __attribute__ ((section(".ramvectors")))
 #if defined(__ARMCC_VERSION)
 __align(256)
@@ -53,6 +63,7 @@ cyisraddress CyRamVectors[NUM_VECTORS];
 /*******************************************************************************
 * Function Name: IntDefaultHandler
 ********************************************************************************
+*
 * Summary:
 *  This function is called for all interrupts, other than reset, that get
 *  called before the system is setup.
@@ -79,6 +90,7 @@ CY_ISR(IntDefaultHandler)
     }
 }
 
+
 #if defined(__ARMCC_VERSION)
 
 /* Local function for the device reset. */
@@ -93,69 +105,11 @@ extern uint32 Image$$ARM_LIB_STACK$$ZI$$Limit;
 /* RealView C Library initialization. */
 extern int __main(void);
 
-/*******************************************************************************
-*
-* Default Rom Interrupt Vector table.
-*
-*******************************************************************************/
-#pragma diag_suppress 1296
-__attribute__ ((section(".romvectors")))
-const cyisraddress RomVectors[NUM_VECTORS] =
-{
-    (cyisraddress)(uint32)&Image$$ARM_LIB_STACK$$ZI$$Limit,             /* The initial stack pointer  0 */
-    (cyisraddress)Reset,                                                /* The reset handler          1 */
-    IntDefaultHandler,                                                  /* The NMI handler            2 */
-    IntDefaultHandler,                                                  /* The hard fault handler     3 */
-    IntDefaultHandler,                                                  /* The MPU fault handler      4 */
-    IntDefaultHandler,                                                  /* The bus fault handler      5 */
-    IntDefaultHandler,                                                  /* The usage fault handler    6 */
-    IntDefaultHandler,                                                  /* Reserved                   7 */
-    IntDefaultHandler,                                                  /* Reserved                   8 */
-    IntDefaultHandler,                                                  /* Reserved                   9 */
-    IntDefaultHandler,                                                  /* Reserved                  10 */
-    IntDefaultHandler,                                                  /* SVCall handler            11 */
-    IntDefaultHandler,                                                  /* Debug monitor handler     12 */
-    IntDefaultHandler,                                                  /* Reserved                  13 */
-    IntDefaultHandler,                                                  /* The PendSV handler        14 */
-    IntDefaultHandler,                                                  /* The SysTick handler       15 */
-    IntDefaultHandler,                                                  /* External Interrupt(0)     16 */
-    IntDefaultHandler,                                                  /* External Interrupt(1)     17 */
-    IntDefaultHandler,                                                  /* External Interrupt(2)     18 */
-    IntDefaultHandler,                                                  /* External Interrupt(3)     19 */
-    IntDefaultHandler,                                                  /* External Interrupt(4)     20 */
-    IntDefaultHandler,                                                  /* External Interrupt(5)     21 */
-    IntDefaultHandler,                                                  /* External Interrupt(6)     22 */
-    IntDefaultHandler,                                                  /* External Interrupt(7)     23 */
-    IntDefaultHandler,                                                  /* External Interrupt(8)     24 */
-    IntDefaultHandler,                                                  /* External Interrupt(9)     25 */
-    IntDefaultHandler,                                                  /* External Interrupt(A)     26 */
-    IntDefaultHandler,                                                  /* External Interrupt(B)     27 */
-    IntDefaultHandler,                                                  /* External Interrupt(C)     28 */
-    IntDefaultHandler,                                                  /* External Interrupt(D)     29 */
-    IntDefaultHandler,                                                  /* External Interrupt(E)     30 */
-    IntDefaultHandler,                                                  /* External Interrupt(F)     31 */
-    IntDefaultHandler,                                                  /* External Interrupt(10)    32 */
-    IntDefaultHandler,                                                  /* External Interrupt(11)    33 */
-    IntDefaultHandler,                                                  /* External Interrupt(12)    34 */
-    IntDefaultHandler,                                                  /* External Interrupt(13)    35 */
-    IntDefaultHandler,                                                  /* External Interrupt(14)    36 */
-    IntDefaultHandler,                                                  /* External Interrupt(15)    37 */
-    IntDefaultHandler,                                                  /* External Interrupt(16)    38 */
-    IntDefaultHandler,                                                  /* External Interrupt(17)    39 */
-    IntDefaultHandler,                                                  /* External Interrupt(18)    40 */
-    IntDefaultHandler,                                                  /* External Interrupt(19)    41 */
-    IntDefaultHandler,                                                  /* External Interrupt(1A)    42 */
-    IntDefaultHandler,                                                  /* External Interrupt(1B)    43 */
-    IntDefaultHandler,                                                  /* External Interrupt(1C)    44 */
-    IntDefaultHandler,                                                  /* External Interrupt(1D)    45 */
-    IntDefaultHandler,                                                  /* External Interrupt(1E)    46 */
-    IntDefaultHandler                                                   /* External Interrupt(1F)    47 */
-};
-
 
 /*******************************************************************************
 * Function Name: Reset
 ********************************************************************************
+*
 * Summary:
 *  This function handles the reset interrupt for the RVDS/MDK toolchains.
 *  This is the first bit of code that is executed at startup.
@@ -180,14 +134,14 @@ __asm void Reset(void)
 
     #if(CYDEV_PROJ_TYPE != CYDEV_PROJ_TYPE_LOADABLE)
         #if(CYDEV_DEBUGGING_ENABLE)
-    ldr  r3, =0x400046e8 /* CYDEV_DEBUG_ENABLE_REGISTER */
+            ldr  r3, =0x400046e8 /* CYDEV_DEBUG_ENABLE_REGISTER */
             ldrb r4, [r3, #0]
             orr  r4, r4, #01
             strb r4, [r3, #0]
 debugEnabled
         #endif    /* (CYDEV_DEBUGGING_ENABLE) */
 
-    ldr  r3, =0x400046f8 /* CYREG_RESET_SR0 */
+        ldr  r3, =0x400046fa /* CYREG_RESET_SR0 */
         ldrb r2, [r3, #0]
 
     #endif  /* (CYDEV_PROJ_TYPE != CYDEV_PROJ_TYPE_LOADABLE) */
@@ -209,6 +163,7 @@ debugEnabled
 /*******************************************************************************
 * Function Name: $Sub$$main
 ********************************************************************************
+*
 * Summary:
 *  This function is called imediatly before the users main
 *
@@ -232,15 +187,14 @@ void $Sub$$main(void)
 
 #elif defined(__GNUC__)
 
-extern uint32 __cs3_interrupt_vector;
+extern void __cs3_stack(void);
 extern void __cs3_start_c(void);
-
-#define RomVectors (cyisraddress)(&__cs3_interrupt_vector)
 
 
 /*******************************************************************************
 * Function Name: Reset
 ********************************************************************************
+*
 * Summary:
 *  This function handles the reset interrupt for the GCC toolchain.  This is the
 *  first bit of code that is executed at startup.
@@ -284,9 +238,33 @@ void Reset(void)
 
 #endif /* __GNUC__ */
 
+
+/*******************************************************************************
+*
+* Default Rom Interrupt Vector table.
+*
+*******************************************************************************/
+#if defined(__ARMCC_VERSION)
+    #pragma diag_suppress 1296
+#endif
+__attribute__ ((section(".romvectors")))
+const cyisraddress RomVectors[NUM_ROM_VECTORS] =
+{
+    #if defined(__ARMCC_VERSION)
+        INITIAL_STACK_POINTER,           /* The initial stack pointer  0 */
+    #elif defined (__GNUC__)
+        &INITIAL_STACK_POINTER,          /* The initial stack pointer  0 */
+    #endif  /* (__ARMCC_VERSION) */
+    (cyisraddress)&Reset,    /* The reset handler          1 */
+    &IntDefaultHandler,      /* The NMI handler            2 */
+    &IntDefaultHandler,      /* The hard fault handler     3 */
+};
+
+
 /*******************************************************************************
 * Function Name: initialize_psoc
 ********************************************************************************
+*
 * Summary:
 *  This function used to initialize the PSoC chip before calling main.
 *
@@ -314,7 +292,7 @@ void initialize_psoc(void)
     /* Set Ram interrupt vectors to default functions. */
     for(i = 0u; i < NUM_VECTORS; i++)
     {
-        CyRamVectors[i] = RomVectors[i];
+        CyRamVectors[i] = (i < NUM_ROM_VECTORS) ? RomVectors[i] : &IntDefaultHandler;
     }
 
     /* Was stored in CFGMEM to avoid being cleared while SRAM gets cleared */
@@ -332,6 +310,9 @@ void initialize_psoc(void)
         CyDmacConfigure();
 
     #endif  /* (0u != DMA_CHANNELS_USED__MASK0) */
+    
+    /* Actually, no need to clean this variable, just to make compiler happy. */
+    cySysNoInitDataValid = 0u;
 }
 
 

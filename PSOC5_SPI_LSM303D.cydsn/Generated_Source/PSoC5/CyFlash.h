@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: CyFlash.h
-* Version 3.30
+* Version 3.40
 *
 *  Description:
 *   Provides the function definitions for the FLASH/EEPROM.
@@ -10,7 +10,7 @@
 *   System Reference Guide provided with PSoC Creator.
 *
 ********************************************************************************
-* Copyright 2008-2012, Cypress Semiconductor Corporation.  All rights reserved.
+* Copyright 2008-2013, Cypress Semiconductor Corporation.  All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
 * the software package with which this file was provided.
@@ -68,7 +68,8 @@ cystatus CyWriteRowFull(uint8 arrayId, uint16 rowNumber, const uint8 * rowData, 
 cystatus CyWriteRowData(uint8 arrayId, uint16 rowAddress, const uint8 * rowData);
 
 #if ((CYDEV_ECC_ENABLE == 0u) && (CYDEV_CONFIGURATION_ECC == 0u))
-    cystatus CyWriteRowConfig(uint8 arrayId, uint16 rowAddress, uint8 * rowECC) ;
+    cystatus CyWriteRowConfig(uint8 arrayId, uint16 rowAddress, const uint8 * rowECC) \
+            ;
 #endif  /* ((CYDEV_ECC_ENABLE == 0u) && (CYDEV_CONFIGURATION_ECC == 0u)) */
 
 void CyFlash_SetWaitCycles(uint8 freq) ;

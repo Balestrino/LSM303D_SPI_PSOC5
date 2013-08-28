@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: cyPm.h
-* Version 3.30
+* Version 3.40
 *
 * Description:
 *  Provides the function definitions for the power management API.
@@ -10,7 +10,7 @@
 *  System Reference Guide provided with PSoC Creator.
 *
 ********************************************************************************
-* Copyright 2008-2012, Cypress Semiconductor Corporation.  All rights reserved.
+* Copyright 2008-2013, Cypress Semiconductor Corporation.  All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
 * the software package with which this file was provided.
@@ -294,8 +294,6 @@ typedef struct cyPmBackupStruct
 
     #if(CY_PSOC5A)
         uint8 buzzSleepTrim;
-    #else
-        uint8 wakeTr2;
     #endif  /* (CY_PSOC5A) */
 
 
@@ -311,6 +309,14 @@ typedef struct cyPmBackupStruct
         uint8 wakeupCfg0;       /* Wake up configuration 0  */
         uint8 wakeupCfg1;       /* Wake up configuration 1  */
         uint8 wakeupCfg2;       /* Wake up configuration 2  */
+
+    #endif  /* (CY_PSOC3 || CY_PSOC5LP) */
+
+
+    #if(CY_PSOC3 || CY_PSOC5LP)
+
+        uint8 wakeupTrim0;
+        uint8 wakeupTrim1;
 
     #endif  /* (CY_PSOC3 || CY_PSOC5LP) */
 
@@ -735,6 +741,23 @@ typedef struct cyPmBackupStruct
 
 /* Boost Control 2: Select external precision reference */
 #define CY_PM_BOOST_CR2_EREFSEL_EXT     (0x08u)
+
+
+
+#if(CY_PSOC3)
+
+    #define CY_PM_PWRSYS_WAKE_TR0       (0xFFu)
+    #define CY_PM_PWRSYS_WAKE_TR1       (0x90u)
+
+#endif  /* (CY_PSOC3) */
+
+
+#if(CY_PSOC5LP)
+
+    #define CY_PM_PWRSYS_WAKE_TR0       (0xFFu)
+    #define CY_PM_PWRSYS_WAKE_TR1       (0xB0u)
+
+#endif  /* (CY_PSOC5LP) */
 
 
 /*******************************************************************************

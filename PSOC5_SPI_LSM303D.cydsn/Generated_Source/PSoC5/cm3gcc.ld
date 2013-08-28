@@ -34,7 +34,6 @@ EXTERN(__cs3_reset Reset)
 EXTERN(__cs3_start_asm __cs3_start_asm_generic_m)
 /* Bring in the interrupt routines & vector */
 INCLUDE micro-names.inc
-EXTERN(__cs3_interrupt_vector_micro)
 EXTERN(__cs3_start_c main __cs3_stack __cs3_heap_end)
 
 /* Provide fall-back values */
@@ -50,10 +49,11 @@ SECTIONS
   .text :
   {
     CREATE_OBJECT_SYMBOLS
-    __cs3_interrupt_vector = __cs3_interrupt_vector_micro;
+    PROVIDE(__cs3_interrupt_vector = RomVectors);
+    *(.romvectors)
     *(.cs3.interrupt_vector)
     /* Make sure we pulled in an interrupt vector.  */
-    ASSERT (. != __cs3_interrupt_vector_micro, "No interrupt vector");
+    ASSERT (. != __cs3_interrupt_vector, "No interrupt vector");
 
     PROVIDE(__cs3_reset = Reset);
     *(.cs3.reset)
@@ -133,7 +133,7 @@ SECTIONS
     __cs3_regions = .;
     LONG (0)
     LONG (__cs3_region_init_ram)
-    LONG (__cs3_region_start_ram)
+    LONG (__cs3_region_start_data)
     LONG (__cs3_region_init_size_ram)
     LONG (__cs3_region_zero_size_ram)
     __cs3_regions_end = .;
@@ -142,13 +142,23 @@ SECTIONS
     _etext = .;
   } >rom
 
-  .data : ALIGN(8)
+  .ramvectors (NOLOAD) : ALIGN(8)
   {
     __cs3_region_start_ram = .;
     *(.cs3.region-head.ram)
     ASSERT (. == __cs3_region_start_ram, ".cs3.region-head.ram not permitted");
-    *(.ramvectors)
-	
+    KEEP(*(.ramvectors))
+  }
+
+  .noinit (NOLOAD) : ALIGN(8)
+  {
+    KEEP(*(.noinit))
+  }
+
+  .data : ALIGN(8)
+  {
+    __cs3_region_start_data = .;
+
     KEEP(*(.jcr))
     *(.got.plt) *(.got)
     *(.shdata)
@@ -167,11 +177,13 @@ SECTIONS
     _end = .;
     __end = .;
   } >ram AT>rom
+  
   __cs3_region_end_ram = __cs3_region_start_ram + LENGTH(ram);
   __cs3_region_size_ram = LENGTH(ram);
   __cs3_region_init_ram = LOADADDR (.data);
   __cs3_region_init_size_ram = _edata - ADDR (.data);
   __cs3_region_zero_size_ram = _end - _edata;
+
 
   .stab 0 (NOLOAD) : { *(.stab) }
   .stabstr 0 (NOLOAD) : { *(.stabstr) }

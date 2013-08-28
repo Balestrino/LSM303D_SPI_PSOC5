@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: LCD.h
-* Version 1.80
+* Version 1.90
 *
 * Description:
 *  This header file contains registers and constants associated with the
@@ -185,26 +185,30 @@ extern uint8 const CYCODE LCD_customFonts[64u];
 *             Registers
 ***************************************/
 
-/* Port Register Definitions */
-#define LCD_PORT_DR_REG              (*(reg8 *) LCD_LCDPort__DR)   /* Data Output Register */
-#define LCD_PORT_DR_PTR              ( (reg8 *) LCD_LCDPort__DR)
-#define LCD_PORT_PS_REG              (*(reg8 *) LCD_LCDPort__PS)   /* Pin State Register */
-#define LCD_PORT_PS_PTR              ( (reg8 *) LCD_LCDPort__PS)
-
 /* Device specific registers */
 #if (CY_PSOC4)
 
-    #define LCD_PORT_PC_REG (*(reg32 *) LCD_LCDPort__PC)
-    #define LCD_PORT_PC_PTR (*(reg32 *) LCD_LCDPort__PC)
+    #define LCD_PORT_DR_REG           (*(reg32 *) LCD_LCDPort__DR)  /* Data Output Register */
+    #define LCD_PORT_DR_PTR           ( (reg32 *) LCD_LCDPort__DR)
+    #define LCD_PORT_PS_REG           (*(reg32 *) LCD_LCDPort__PS)  /* Pin State Register */
+    #define LCD_PORT_PS_PTR           ( (reg32 *) LCD_LCDPort__PS)
+    
+    #define LCD_PORT_PC_REG           (*(reg32 *) LCD_LCDPort__PC)
+    #define LCD_PORT_PC_PTR           (*(reg32 *) LCD_LCDPort__PC)
     
 #else
 
-    #define LCD_PORT_DM0_REG             (*(reg8 *) LCD_LCDPort__DM0)  /* Port Drive Mode 0 */
-    #define LCD_PORT_DM0_PTR             ( (reg8 *) LCD_LCDPort__DM0)
-    #define LCD_PORT_DM1_REG             (*(reg8 *) LCD_LCDPort__DM1)  /* Port Drive Mode 1 */
-    #define LCD_PORT_DM1_PTR             ( (reg8 *) LCD_LCDPort__DM1)
-    #define LCD_PORT_DM2_REG             (*(reg8 *) LCD_LCDPort__DM2)  /* Port Drive Mode 2 */
-    #define LCD_PORT_DM2_PTR             ( (reg8 *) LCD_LCDPort__DM2)
+    #define LCD_PORT_DR_REG           (*(reg8 *) LCD_LCDPort__DR)  /* Data Output Register */
+    #define LCD_PORT_DR_PTR           ( (reg8 *) LCD_LCDPort__DR)
+    #define LCD_PORT_PS_REG           (*(reg8 *) LCD_LCDPort__PS)  /* Pin State Register */
+    #define LCD_PORT_PS_PTR           ( (reg8 *) LCD_LCDPort__PS)
+
+    #define LCD_PORT_DM0_REG          (*(reg8 *) LCD_LCDPort__DM0) /* Port Drive Mode 0 */
+    #define LCD_PORT_DM0_PTR          ( (reg8 *) LCD_LCDPort__DM0)
+    #define LCD_PORT_DM1_REG          (*(reg8 *) LCD_LCDPort__DM1) /* Port Drive Mode 1 */
+    #define LCD_PORT_DM1_PTR          ( (reg8 *) LCD_LCDPort__DM1)
+    #define LCD_PORT_DM2_REG          (*(reg8 *) LCD_LCDPort__DM2) /* Port Drive Mode 2 */
+    #define LCD_PORT_DM2_PTR          ( (reg8 *) LCD_LCDPort__DM2)
 
 #endif /* CY_PSOC4 */
 
@@ -214,8 +218,13 @@ extern uint8 const CYCODE LCD_customFonts[64u];
 ***************************************/
 
 /* SHIFT must be 1 or 0 */
-#define LCD_PORT_SHIFT               (LCD_LCDPort__SHIFT)
-#define LCD_PORT_MASK                (LCD_LCDPort__MASK)
+#if (0 == LCD_LCDPort__SHIFT)
+    #define LCD_PORT_SHIFT               (0x00u)
+#else
+    #define LCD_PORT_SHIFT               (0x01u)
+#endif /* (0 == LCD_LCDPort__SHIFT) */
+
+#define LCD_PORT_MASK                ((uint8) (LCD_LCDPort__MASK))
 
 #if (CY_PSOC4)
 
@@ -225,7 +234,9 @@ extern uint8 const CYCODE LCD_customFonts[64u];
     */
     #define LCD_HIGH_Z_DATA_DM           (0x00000249ul)
     #define LCD_STRONG_DATA_DM           (0x00000DB6ul)
-    #define LCD_DM_DATA_MASK             (0xFFFul << (LCD_PORT_SHIFT * 3u))
+    #define LCD_DATA_PINS_MASK           (0x00000FFFul)
+    #define LCD_DM_DATA_MASK             ((uint32)(LCD_DATA_PINS_MASK << \
+                                                          (LCD_PORT_SHIFT * 3u)))
     
 #else
 
@@ -247,11 +258,16 @@ extern uint8 const CYCODE LCD_customFonts[64u];
 #endif /* CY_PSOC4 */
 
 /* Pin Masks */
-#define LCD_RS                       ((uint8) (((uint8) 0x20u) << LCD_LCDPort__SHIFT))
-#define LCD_RW                       ((uint8) (((uint8) 0x40u) << LCD_LCDPort__SHIFT))
-#define LCD_E                        ((uint8) (((uint8) 0x10u) << LCD_LCDPort__SHIFT))
-#define LCD_READY_BIT                ((uint8) (((uint8) 0x08u) << LCD_LCDPort__SHIFT))
-#define LCD_DATA_MASK                ((uint8) (((uint8) 0x0Fu) << LCD_LCDPort__SHIFT))
+#define LCD_RS                     ((uint8) \
+                                                (((uint8) 0x20u) << LCD_LCDPort__SHIFT))
+#define LCD_RW                     ((uint8) \
+                                                (((uint8) 0x40u) << LCD_LCDPort__SHIFT))
+#define LCD_E                      ((uint8) \
+                                                (((uint8) 0x10u) << LCD_LCDPort__SHIFT))
+#define LCD_READY_BIT              ((uint8) \
+                                                (((uint8) 0x08u) << LCD_LCDPort__SHIFT))
+#define LCD_DATA_MASK              ((uint8) \
+                                                (((uint8) 0x0Fu) << LCD_LCDPort__SHIFT))
 
 /* These names are obsolete and will be removed in future revisions */
 #define LCD_PORT_DR                  LCD_PORT_DR_REG

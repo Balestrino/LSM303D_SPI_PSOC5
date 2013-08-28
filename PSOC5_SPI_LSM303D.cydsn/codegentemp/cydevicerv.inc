@@ -1,13 +1,13 @@
 ;
 ; FILENAME: cydevicerv.inc
 ; OBSOLETE: Do not use this file. Use the _trm version instead.
-; PSoC Creator 2.2 Component Pack 5
+; PSoC Creator 2.2 Component Pack 6
 ;
 ; DESCRIPTION:
 ; This file provides all of the address values for the entire PSoC device.
 ;
 ;-------------------------------------------------------------------------------
-; Copyright 2008-2012, Cypress Semiconductor Corporation.  All rights reserved.
+; Copyright 2008-2013, Cypress Semiconductor Corporation.  All rights reserved.
 ; You may use this file only in accordance with the license, terms, conditions, 
 ; disclaimers, and limitations in the end user license agreement accompanying 
 ; the software package with which this file was provided.

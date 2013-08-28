@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: CyDmac.h
-* Version 3.30
+* Version 3.40
 *
 *  Description:
 *   Provides the function definitions for the DMA Controller.
@@ -10,7 +10,7 @@
 *   System Reference Guide provided with PSoC Creator.
 *
 ********************************************************************************
-* Copyright 2008-2012, Cypress Semiconductor Corporation.  All rights reserved.
+* Copyright 2008-2013, Cypress Semiconductor Corporation.  All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
 * the software package with which this file was provided.
@@ -109,9 +109,9 @@ typedef struct dmac_tdmem2_struct
 #define CY_DMA_INVALID_TD           0xFFu   /* Invalid TD */
 #define CY_DMA_END_CHAIN_TD         0xFFu   /* End of chain TD */
 
-#if(CY_PSOC3)
+#if(CY_PSOC3 || CY_PSOC5LP)
     #define CY_DMA_DISABLE_TD       0xFEu
-#endif  /* (CY_PSOC3) */
+#endif  /* (CY_PSOC3 || CY_PSOC5LP) */
 
 #define CY_DMA_TD_SIZE              0x08u
 
@@ -195,9 +195,9 @@ typedef struct dmac_tdmem2_struct
 #define DMAC_UNPOP_ACC              (CY_DMA_UNPOP_ACC)
 #define DMAC_PERIPH_ERR             (CY_DMA_PERIPH_ERR)
 #define ROUND_ROBIN_ENABLE          (CY_DMA_ROUND_ROBIN_ENABLE)
-#if(CY_PSOC3)
+#if(CY_PSOC3 || CY_PSOC5LP)
     #define DMA_DISABLE_TD          (CY_DMA_DISABLE_TD)
-#endif  /* (CY_PSOC3) */
+#endif  /* (CY_PSOC3 || CY_PSOC5LP) */
 
 #define DMAC_CFG                    (CY_DMA_CFG_PTR)
 #define DMAC_ERR                    (CY_DMA_ERR_PTR)

@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: CyLib.h
-* Version 3.30
+* Version 3.40
 *
 * Description:
 *  Provides the function definitions for the system, clocking, interrupts and
@@ -11,7 +11,7 @@
 *  Guide provided with PSoC Creator.
 *
 ********************************************************************************
-* Copyright 2008-2012, Cypress Semiconductor Corporation.  All rights reserved.
+* Copyright 2008-2013, Cypress Semiconductor Corporation.  All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
 * the software package with which this file was provided.
@@ -803,7 +803,7 @@ uint8 CyVdRealTimeStatus(void) ;
     #define INTERRUPT_CSR               ((reg8 *) CYREG_INTC_CSR_EN)
     #define DISABLE_IRQ_SET             ((uint8)(0x01u << 1u))    /* INTC_CSR_EN */
     #define INTERRUPT_DISABLE_IRQ       {*INTERRUPT_CSR |= DISABLE_IRQ_SET;}
-    #define INTERRUPT_ENABLE_IRQ        {*INTERRUPT_CSR &= (uint8)(~DISABLE_IRQ_SET);}
+    #define INTERRUPT_ENABLE_IRQ        {*INTERRUPT_CSR = (uint8)(~DISABLE_IRQ_SET);}
 #endif  /* (CY_PSOC3) */
 
 

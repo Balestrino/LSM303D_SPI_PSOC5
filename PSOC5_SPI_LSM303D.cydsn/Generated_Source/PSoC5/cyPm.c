@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: cyPm.c
-* Version 3.30
+* Version 3.40
 *
 * Description:
 *  Provides an API for the power management.
@@ -10,7 +10,7 @@
 *  System Reference Guide provided with PSoC Creator.
 *
 ********************************************************************************
-* Copyright 2008-2012, Cypress Semiconductor Corporation.  All rights reserved.
+* Copyright 2008-2013, Cypress Semiconductor Corporation.  All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
 * the software package with which this file was provided.
@@ -194,7 +194,7 @@ void CyPmSaveClocks(void)
     }    /* Need to change nothing if master clock source is IMO */
 
     /* Bus clock - save divider and set it, if needed, to divide-by-one */
-    cyPmClockBackup.clkBusDiv = ((uint16) CY_PM_CLK_BUS_MSB_DIV_REG << 8u) | CY_PM_CLK_BUS_LSB_DIV_REG;
+    cyPmClockBackup.clkBusDiv = (uint16) ((uint16) CY_PM_CLK_BUS_MSB_DIV_REG << 8u) | CY_PM_CLK_BUS_LSB_DIV_REG;
     if(CY_PM_BUS_CLK_DIV_BY_ONE != cyPmClockBackup.clkBusDiv)
     {
         CyBusClk_SetDivider(CY_PM_BUS_CLK_DIV_BY_ONE);
@@ -456,7 +456,7 @@ void CyPmRestoreClocks(void)
     }
 
     /* Bus clock - restore divider, if needed */
-    if(cyPmClockBackup.clkBusDiv != (((uint16) CY_PM_CLK_BUS_MSB_DIV_REG << 8u) | CY_PM_CLK_BUS_LSB_DIV_REG))
+    if(cyPmClockBackup.clkBusDiv != ((uint16)((uint16) CY_PM_CLK_BUS_MSB_DIV_REG << 8u) | CY_PM_CLK_BUS_LSB_DIV_REG))
     {
         CyBusClk_SetDivider(cyPmClockBackup.clkBusDiv);
     }
@@ -861,7 +861,7 @@ void CyPmAltAct(uint16 wakeupTime, uint16 wakeupSource)
 * Reentrant:
 *  No
 *
-* Side Effects:
+* Side Effects and Restrictions:
 *  For PSoC 5 silicon the wakeup source is not selectable. In this case the
 *  wakeupSource argument is ignored and any of the available wakeup sources will
 *  wake the device.
@@ -874,6 +874,15 @@ void CyPmAltAct(uint16 wakeupTime, uint16 wakeupSource)
 *  The 1 kHz ILO clock is expected to be enabled for PSoC 3 and PSoC 5LP to
 *  measure Hibernate/Sleep regulator settling time after a reset. The holdoff
 *  delay is measured using rising edges of the 1 kHz ILO.
+*
+*  For PSoC 3 silicon hardware buzz should be disabled before entering a sleep
+*  power mode. It is disabled by PSoC Creator during startup.
+*  If a Low Voltage Interrupt (LVI), High Voltage Interrupt (HVI) or Brown Out
+*  detect (power supply supervising capabilities) are required in a design
+*  during sleep, use the Central Time Wheel (CTW) to periodically wake the
+*  device, perform software buzz, and refresh the supervisory services. If LVI,
+*  HVI, or Brown Out is not required, then use of the CTW is not required.
+*  Refer to the device errata for more information.
 *
 *******************************************************************************/
 void CyPmSleep(uint8 wakeupTime, uint16 wakeupSource) 
@@ -912,10 +921,18 @@ void CyPmSleep(uint8 wakeupTime, uint16 wakeupSource)
 
     #if(CY_PSOC3)
 
-        /* Hardware buzz expected to be disabled below for TO6 */
+        /* Silicon Revision ID is below TO6 */
         if(CYDEV_CHIP_REV_ACTUAL < 5u)
         {
+            /* Hardware buzz expected to be disabled in Sleep mode */
             CYASSERT(0u == (CY_PM_PWRSYS_WAKE_TR2_REG & CY_PM_PWRSYS_WAKE_TR2_EN_BUZZ));
+
+            /* LVI/HVI requires hardware buzz to be enabled */
+            if(0u != (CY_PM_RESET_CR1_REG & (CY_PM_RESET_CR1_HVIA_EN |
+                  CY_PM_RESET_CR1_LVIA_EN | CY_PM_RESET_CR1_LVID_EN)))
+            {
+                CYASSERT(0u != 0u);
+            }
         }
 
     #endif /* (CY_PSOC3) */
@@ -1399,6 +1416,21 @@ static void CyPmHibSaveSet(void)
 
     /* Make the same preparations for Hibernate and Sleep modes */
     CyPmHibSlpSaveSet();
+
+
+    /***************************************************************************
+    * Save and set power mode wakeup trim registers
+    ***************************************************************************/
+    #if(CY_PSOC3 || CY_PSOC5LP)
+
+        cyPmBackup.wakeupTrim0 = CY_PM_PWRSYS_WAKE_TR0_REG;
+        cyPmBackup.wakeupTrim1 = CY_PM_PWRSYS_WAKE_TR1_REG;
+
+        CY_PM_PWRSYS_WAKE_TR0_REG = CY_PM_PWRSYS_WAKE_TR0;
+        CY_PM_PWRSYS_WAKE_TR1_REG = CY_PM_PWRSYS_WAKE_TR1;
+
+    #endif /* (CY_PSOC3 || CY_PSOC5LP) */
+
 }
 
 
@@ -1469,6 +1501,17 @@ static void CyPmHibRestore(void)
         }
 
     #endif /* (!CY_PSOC5A) */
+
+
+    /***************************************************************************
+    * Restore power mode wakeup trim registers
+    ***************************************************************************/
+    #if(CY_PSOC3 || CY_PSOC5LP)
+
+        CY_PM_PWRSYS_WAKE_TR0_REG = cyPmBackup.wakeupTrim0;
+        CY_PM_PWRSYS_WAKE_TR1_REG = cyPmBackup.wakeupTrim1;
+
+    #endif /* (CY_PSOC3 || CY_PSOC5LP) */
 }
 
 
@@ -1720,15 +1763,10 @@ void CyPmFtwSetInterval(uint8 ftwInterval)
 *    * Save timewheels configuration
 *    * Disable FTW and 1PPS (enable and interrupt)
 *    * Reset CTW
-*    * Save and disable PICU interrupts (PSoC 5)
-*    * Save and disable PRES-A and PRES-D (PSoC 5)
+*    * Save and disable PICU interrupts
+*    * Save and disable PRES-A and PRES-D
 *  - Save and disable LVI/HVI configuration (PSoC 5)
 *  - Save and set to max buzz interval (PSoC 5)
-*  - If LVI/HVI is enabled than hardware buzz in required (PSoC 3):
-*    * Prepare wake trim registers
-*    * Disable LDO-A in proper way
-*  - If LVI/HVI is disabled than hardware buzz in not required (PSoC 3):
-*    * Disabled hardware buzz
 *  - CyPmHibSlpSaveSet() function is called
 *
 * Parameters:
@@ -1796,53 +1834,6 @@ static void CyPmSlpSaveSet(void)
     #endif  /* (CY_PSOC5A) */
 
 
-    #if(CY_PSOC3)
-
-        /***************************************************************************
-        * If LVI/HVI is enabled than hardware buzz in required:
-        *  - Prepare wake trim registers
-        *  - Disable LDO-A in proper way
-        *
-        * If LVI/HVI is disabled than hardware buzz in not required:
-        *  - Disabled hardware buzz
-        ***************************************************************************/
-
-        cyPmBackup.wakeTr2 = CY_PM_PWRSYS_WAKE_TR2_REG;
-
-        /* Reconfigure power mode wakeup trim registers */
-        if(0u != (CY_PM_RESET_CR1_REG & (CY_PM_RESET_CR1_HVIA_EN |
-                  CY_PM_RESET_CR1_LVIA_EN | CY_PM_RESET_CR1_LVID_EN)))
-        {
-            /* HVI/LVI is enabled - hardware buzz is required */
-            if(CYDEV_CHIP_REV_ACTUAL < 5u)
-            {
-                /* Update entire register */
-                CY_PM_PWRSYS_WAKE_TR2_REG = 0x3Bu;
-
-                /* Prepares for disabling LDO-A by moving bandgap reference to VCCD */
-                CY_PM_PWRSYS_CR1_REG = 0x01u;
-
-                /* Disables LDO-A */
-                CY_PM_PWRSYS_CR1_REG |= 0x02u;
-            }
-            else
-            {
-                /* For later revisions, just enable buzz */
-                CY_PM_PWRSYS_WAKE_TR2_REG |= CY_PM_PWRSYS_WAKE_TR2_EN_BUZZ;
-            }
-        }
-        else
-        {
-            /* HVI/LVI is disabled - hardware buzz is not required */
-            if(CYDEV_CHIP_REV_ACTUAL < 5u)
-            {
-                /* Update entire register */
-                CY_PM_PWRSYS_WAKE_TR2_REG = 0x3Au;
-            }
-        }
-
-    #endif  /* (CY_PSOC3) */
-
     /* Apply configuration that are same for Sleep and Hibernate */
     CyPmHibSlpSaveSet();
 }
@@ -1857,7 +1848,6 @@ static void CyPmSlpSaveSet(void)
 *  - Restore timewheel configuration (PSoC 5)
 *  - Restore PRES-A and PRES-D (PSoC 5)
 *  - Restore PICU interrupts (PSoC 5)
-*  - Restore LVI/HVI configuration (PSoC 3)
 *  - Restore buzz sleep trim value (PSoC 5)
 *  - Call to CyPmHibSlpSaveRestore()
 *
@@ -1895,28 +1885,6 @@ static void CyPmSlpRestore(void)
                                   (CY_PM_PWRSYS_BUZZ_TR_REG & CY_PM_PWRSYS_BUZZ_TR_MASK);
 
     #endif  /* (CY_PSOC5A) */
-
-
-    #if(CY_PSOC3)
-
-        CY_PM_PWRSYS_WAKE_TR2_REG = cyPmBackup.wakeTr2;
-
-        /* HVI/LVI is enabled - hardware buzz is required */
-        if(CYDEV_CHIP_REV_ACTUAL < 5u)
-        {
-            /* Reconfigure power mode wakeup trim registers */
-            if(0u != (CY_PM_RESET_CR1_REG & (CY_PM_RESET_CR1_HVIA_EN |
-                      CY_PM_RESET_CR1_LVIA_EN | CY_PM_RESET_CR1_LVID_EN)))
-            {
-                /* Enables LDO-A */
-                CY_PM_PWRSYS_CR1_REG &= ((uint8)(~0x02u));
-
-                /* Moves bandgap reference back to VCCA */
-                CY_PM_PWRSYS_CR1_REG &= ((uint8)(~0x01u));
-            }
-        }
-
-    #endif  /* (CY_PSOC3) */
 
 
     /* Restore configuration that are same for Sleep and Hibernate */

@@ -1,6 +1,6 @@
 // ======================================================================
 // PSOC5_SPI_LSM303D.v generated from TopDesign.cysch
-// 03/22/2013 at 10:33
+// 07/25/2013 at 16:48
 // This file is auto generated. ANY EDITS YOU MAKE MAY BE LOST WHEN THIS FILE IS REGENERATED!!!
 // ======================================================================
 
@@ -10,16 +10,19 @@
 `define CYDEV_CHIP_REV_LEOPARD_ES3 3
 `define CYDEV_CHIP_REV_LEOPARD_ES2 1
 `define CYDEV_CHIP_REV_LEOPARD_ES1 0
-`define CYDEV_CHIP_DIE_PANTHER 2
+`define CYDEV_CHIP_DIE_PSOC4A 2
+`define CYDEV_CHIP_REV_PSOC4A_PRODUCTION 17
+`define CYDEV_CHIP_REV_PSOC4A_ES0 17
+`define CYDEV_CHIP_DIE_PANTHER 3
 `define CYDEV_CHIP_REV_PANTHER_PRODUCTION 1
 `define CYDEV_CHIP_REV_PANTHER_ES1 1
 `define CYDEV_CHIP_REV_PANTHER_ES0 0
-`define CYDEV_CHIP_DIE_PSOC5LP 3
+`define CYDEV_CHIP_DIE_PSOC5LP 4
 `define CYDEV_CHIP_REV_PSOC5LP_PRODUCTION 0
 `define CYDEV_CHIP_REV_PSOC5LP_ES0 0
-`define CYDEV_CHIP_DIE_EXPECT 2
+`define CYDEV_CHIP_DIE_EXPECT 3
 `define CYDEV_CHIP_REV_EXPECT 1
-`define CYDEV_CHIP_DIE_ACTUAL 2
+`define CYDEV_CHIP_DIE_ACTUAL 3
 /* -- WARNING: The previous section of defines are deprecated and will be removed in a future release -- */
 `define CYDEV_CHIP_FAMILY_UNKNOWN 0
 `define CYDEV_CHIP_MEMBER_UNKNOWN 0
@@ -29,16 +32,20 @@
 `define CYDEV_CHIP_REVISION_3A_ES3 3
 `define CYDEV_CHIP_REVISION_3A_ES2 1
 `define CYDEV_CHIP_REVISION_3A_ES1 0
-`define CYDEV_CHIP_FAMILY_PSOC5 2
-`define CYDEV_CHIP_MEMBER_5A 2
+`define CYDEV_CHIP_FAMILY_PSOC4 2
+`define CYDEV_CHIP_MEMBER_4A 2
+`define CYDEV_CHIP_REVISION_4A_PRODUCTION 17
+`define CYDEV_CHIP_REVISION_4A_ES0 17
+`define CYDEV_CHIP_FAMILY_PSOC5 3
+`define CYDEV_CHIP_MEMBER_5A 3
 `define CYDEV_CHIP_REVISION_5A_PRODUCTION 1
 `define CYDEV_CHIP_REVISION_5A_ES1 1
 `define CYDEV_CHIP_REVISION_5A_ES0 0
-`define CYDEV_CHIP_MEMBER_5B 3
+`define CYDEV_CHIP_MEMBER_5B 4
 `define CYDEV_CHIP_REVISION_5B_PRODUCTION 0
 `define CYDEV_CHIP_REVISION_5B_ES0 0
-`define CYDEV_CHIP_FAMILY_USED 2
-`define CYDEV_CHIP_MEMBER_USED 2
+`define CYDEV_CHIP_FAMILY_USED 3
+`define CYDEV_CHIP_MEMBER_USED 3
 `define CYDEV_CHIP_REVISION_USED 1
 // Component: ZeroTerminal
 `ifdef CY_BLK_DIR
@@ -159,8 +166,8 @@ module SPI_Master_v2_40_0 (
 
 endmodule
 
-// CharLCD_v1_80(ConversionRoutines=true, CUSTOM0=0,E,8,8,8,E,0, CUSTOM1=0,A,A,4,4,4,0, CUSTOM2=0,E,A,E,8,8,0, CUSTOM3=0,E,A,C,A,A,0, CUSTOM4=0,E,8,C,8,E,0, CUSTOM5=0,E,8,E,2,E,0, CUSTOM6=0,E,8,E,2,E,0, CUSTOM7=0,4,4,4,0,4,0, CustomCharacterSet=0, CY_COMPONENT_NAME=CharLCD_v1_80, CY_CONTROL_FILE=<:default:>, CY_FITTER_NAME=LCD, CY_INSTANCE_SHORT_NAME=LCD, CY_MAJOR_VERSION=1, CY_MINOR_VERSION=80, CY_REMOVE=false, CY_SUPPRESS_API_GEN=false, CY_VERSION=cydsfit No Version Information Found, INSTANCE_NAME=LCD, )
-module CharLCD_v1_80_1 ;
+// CharLCD_v1_90(ConversionRoutines=true, CUSTOM0=0,E,8,8,8,E,0, CUSTOM1=0,A,A,4,4,4,0, CUSTOM2=0,E,A,E,8,8,0, CUSTOM3=0,E,A,C,A,A,0, CUSTOM4=0,E,8,C,8,E,0, CUSTOM5=0,E,8,E,2,E,0, CUSTOM6=0,E,8,E,2,E,0, CUSTOM7=0,4,4,4,0,4,0, CustomCharacterSet=0, TypeReplacementString=uint8, CY_COMPONENT_NAME=CharLCD_v1_90, CY_CONTROL_FILE=<:default:>, CY_FITTER_NAME=LCD, CY_INSTANCE_SHORT_NAME=LCD, CY_MAJOR_VERSION=1, CY_MINOR_VERSION=90, CY_REMOVE=false, CY_SUPPRESS_API_GEN=false, CY_VERSION=cydsfit No Version Information Found, INSTANCE_NAME=LCD, )
+module CharLCD_v1_90_1 ;
 
 
 
@@ -377,9 +384,115 @@ endmodule
 `include "C:\Program Files (x86)\Cypress\PSoC Creator\2.2\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\not_v1_0\not_v1_0.v"
 `endif
 
+// Component: B_Timer_v2_50
+`ifdef CY_BLK_DIR
+`undef CY_BLK_DIR
+`endif
+
+`ifdef WARP
+`define CY_BLK_DIR "$CYPRESS_DIR\..\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\B_Timer_v2_50"
+`include "$CYPRESS_DIR\..\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\B_Timer_v2_50\B_Timer_v2_50.v"
+`else
+`define CY_BLK_DIR "C:\Program Files (x86)\Cypress\PSoC Creator\2.2\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\B_Timer_v2_50"
+`include "C:\Program Files (x86)\Cypress\PSoC Creator\2.2\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\B_Timer_v2_50\B_Timer_v2_50.v"
+`endif
+
+// Component: OneTerminal
+`ifdef CY_BLK_DIR
+`undef CY_BLK_DIR
+`endif
+
+`ifdef WARP
+`define CY_BLK_DIR "$CYPRESS_DIR\..\psoc\content\cyprimitives\CyPrimitives.cylib\OneTerminal"
+`include "$CYPRESS_DIR\..\psoc\content\cyprimitives\CyPrimitives.cylib\OneTerminal\OneTerminal.v"
+`else
+`define CY_BLK_DIR "C:\Program Files (x86)\Cypress\PSoC Creator\2.2\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\OneTerminal"
+`include "C:\Program Files (x86)\Cypress\PSoC Creator\2.2\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\OneTerminal\OneTerminal.v"
+`endif
+
+// Timer_v2_50(CaptureAlternatingFall=false, CaptureAlternatingRise=false, CaptureCount=2, CaptureCounterEnabled=false, CaptureInputEnabled=false, CaptureMode=0, CONTROL3=0, ControlRegRemoved=0, CtlModeReplacementString=AsyncCtl, CyGetRegReplacementString=CY_GET_REG16, CySetRegReplacementString=CY_SET_REG16, DeviceFamily=PSoC5, EnableMode=0, FF16=false, FF8=false, FixedFunction=false, FixedFunctionUsed=0, HWCaptureCounterEnabled=false, InterruptOnCapture=false, InterruptOnFIFOFull=false, InterruptOnTC=false, IntOnCapture=0, IntOnFIFOFull=0, IntOnTC=0, NumberOfCaptures=1, param45=1, Period=499, RegDefReplacementString=reg16, RegSizeReplacementString=uint16, Resolution=16, RstStatusReplacementString=nrstSts, RunMode=1, SiliconRevision=1, SoftwareCaptureModeEnabled=false, SoftwareTriggerModeEnabled=false, TriggerInputEnabled=false, TriggerMode=0, UDB16=true, UDB24=false, UDB32=false, UDB8=false, UDBControlReg=true, UsesHWEnable=0, VerilogSectionReplacementString=sT16, CY_COMPONENT_NAME=Timer_v2_50, CY_CONTROL_FILE=<:default:>, CY_FITTER_NAME=Timer_1, CY_INSTANCE_SHORT_NAME=Timer_1, CY_MAJOR_VERSION=2, CY_MINOR_VERSION=50, CY_REMOVE=false, CY_SUPPRESS_API_GEN=false, CY_VERSION=cydsfit No Version Information Found, INSTANCE_NAME=Timer_1, )
+module Timer_v2_50_3 (
+    clock,
+    reset,
+    interrupt,
+    enable,
+    capture,
+    trigger,
+    capture_out,
+    tc);
+    input       clock;
+    input       reset;
+    output      interrupt;
+    input       enable;
+    input       capture;
+    input       trigger;
+    output      capture_out;
+    output      tc;
+
+    parameter CaptureCount = 2;
+    parameter CaptureCounterEnabled = 0;
+    parameter DeviceFamily = "PSoC5";
+    parameter InterruptOnCapture = 0;
+    parameter InterruptOnTC = 0;
+    parameter Resolution = 16;
+    parameter SiliconRevision = "1";
+
+          wire  Net_260;
+          wire  Net_261;
+          wire  Net_266;
+          wire  Net_102;
+          wire  Net_55;
+          wire  Net_57;
+          wire  Net_53;
+          wire  Net_51;
+
+    ZeroTerminal ZeroTerminal_1 (
+        .z(Net_260));
+
+	// VirtualMux_2 (cy_virtualmux_v1_0)
+	assign interrupt = Net_55;
+
+	// VirtualMux_3 (cy_virtualmux_v1_0)
+	assign tc = Net_53;
+
+    B_Timer_v2_50 TimerUDB (
+        .reset(reset),
+        .interrupt(Net_55),
+        .enable(enable),
+        .trigger(trigger),
+        .capture_in(capture),
+        .capture_out(capture_out),
+        .tc(Net_53),
+        .clock(clock));
+    defparam TimerUDB.Capture_Count = 2;
+    defparam TimerUDB.CaptureCounterEnabled = 0;
+    defparam TimerUDB.CaptureMode = 0;
+    defparam TimerUDB.EnableMode = 0;
+    defparam TimerUDB.InterruptOnCapture = 0;
+    defparam TimerUDB.Resolution = 16;
+    defparam TimerUDB.RunMode = 1;
+    defparam TimerUDB.TriggerMode = 0;
+
+    OneTerminal OneTerminal_1 (
+        .o(Net_102));
+
+	// VirtualMux_1 (cy_virtualmux_v1_0)
+	assign Net_266 = Net_102;
+
+
+
+endmodule
+
 // top
 module top ;
 
+          wire  Net_656;
+          wire  Net_668;
+          wire  Net_667;
+          wire  Net_666;
+          wire  Net_665;
+          wire  Net_664;
+          wire  Net_663;
           wire  Net_583;
           wire  Net_582;
           wire  Net_581;
@@ -390,6 +503,9 @@ module top ;
           wire  Net_576;
           wire  Net_575;
           wire  Net_574;
+          wire  Net_589;
+          wire  Net_588;
+          wire  Net_443;
           wire  Net_400;
           wire  Net_263;
           wire  Net_262;
@@ -400,23 +516,27 @@ module top ;
           wire  Net_257;
           wire  Net_256;
           wire  Net_255;
+          wire [2:0] mywire_1;
           wire  Net_254;
           wire  Net_573;
           wire  Net_572;
           wire  Net_571;
-          wire [1:0] mywire_1;
           wire  Net_570;
+          wire  Net_12;
+          wire  Net_10;
+          wire  Net_596;
+          wire  Net_585;
+          wire  Net_594;
+          wire  Net_592;
+          wire  Net_591;
+          wire  Net_590;
           wire  Net_479;
           wire  Net_425;
           wire  Net_428;
           wire  Net_422;
           wire  Net_419;
-          wire  Net_449;
           wire  Net_438;
           wire  Net_439;
-          wire  Net_443;
-          wire  Net_441;
-          wire  Net_444;
           wire  Net_161;
           wire  Net_191;
           wire  Net_234;
@@ -648,7 +768,7 @@ module top ;
     defparam SPIM.NumberOfDataBits = 8;
     defparam SPIM.ShiftDir = 0;
 
-    CharLCD_v1_80_1 LCD ();
+    CharLCD_v1_90_1 LCD ();
 
     UART_v2_30_2 UART_1 (
         .cts_n(1'b0),
@@ -768,43 +888,111 @@ module top ;
         reg  tmp__demux_1_1_reg;
         reg  tmp__demux_1_2_reg;
         reg  tmp__demux_1_3_reg;
+        reg  tmp__demux_1_4_reg;
+        reg  tmp__demux_1_5_reg;
+        reg  tmp__demux_1_6_reg;
+        reg  tmp__demux_1_7_reg;
         always @(Net_438 or mywire_1)
         begin
-            case (mywire_1[1:0])
-                2'b00:
+            case (mywire_1[2:0])
+                3'b000:
                 begin
                     tmp__demux_1_0_reg = Net_438;
                     tmp__demux_1_1_reg = 1'b0;
                     tmp__demux_1_2_reg = 1'b0;
                     tmp__demux_1_3_reg = 1'b0;
+                    tmp__demux_1_4_reg = 1'b0;
+                    tmp__demux_1_5_reg = 1'b0;
+                    tmp__demux_1_6_reg = 1'b0;
+                    tmp__demux_1_7_reg = 1'b0;
                 end
-                2'b01:
+                3'b001:
                 begin
                     tmp__demux_1_0_reg = 1'b0;
                     tmp__demux_1_1_reg = Net_438;
                     tmp__demux_1_2_reg = 1'b0;
                     tmp__demux_1_3_reg = 1'b0;
+                    tmp__demux_1_4_reg = 1'b0;
+                    tmp__demux_1_5_reg = 1'b0;
+                    tmp__demux_1_6_reg = 1'b0;
+                    tmp__demux_1_7_reg = 1'b0;
                 end
-                2'b10:
+                3'b010:
                 begin
                     tmp__demux_1_0_reg = 1'b0;
                     tmp__demux_1_1_reg = 1'b0;
                     tmp__demux_1_2_reg = Net_438;
                     tmp__demux_1_3_reg = 1'b0;
+                    tmp__demux_1_4_reg = 1'b0;
+                    tmp__demux_1_5_reg = 1'b0;
+                    tmp__demux_1_6_reg = 1'b0;
+                    tmp__demux_1_7_reg = 1'b0;
                 end
-                2'b11:
+                3'b011:
                 begin
                     tmp__demux_1_0_reg = 1'b0;
                     tmp__demux_1_1_reg = 1'b0;
                     tmp__demux_1_2_reg = 1'b0;
                     tmp__demux_1_3_reg = Net_438;
+                    tmp__demux_1_4_reg = 1'b0;
+                    tmp__demux_1_5_reg = 1'b0;
+                    tmp__demux_1_6_reg = 1'b0;
+                    tmp__demux_1_7_reg = 1'b0;
+                end
+                3'b100:
+                begin
+                    tmp__demux_1_0_reg = 1'b0;
+                    tmp__demux_1_1_reg = 1'b0;
+                    tmp__demux_1_2_reg = 1'b0;
+                    tmp__demux_1_3_reg = 1'b0;
+                    tmp__demux_1_4_reg = Net_438;
+                    tmp__demux_1_5_reg = 1'b0;
+                    tmp__demux_1_6_reg = 1'b0;
+                    tmp__demux_1_7_reg = 1'b0;
+                end
+                3'b101:
+                begin
+                    tmp__demux_1_0_reg = 1'b0;
+                    tmp__demux_1_1_reg = 1'b0;
+                    tmp__demux_1_2_reg = 1'b0;
+                    tmp__demux_1_3_reg = 1'b0;
+                    tmp__demux_1_4_reg = 1'b0;
+                    tmp__demux_1_5_reg = Net_438;
+                    tmp__demux_1_6_reg = 1'b0;
+                    tmp__demux_1_7_reg = 1'b0;
+                end
+                3'b110:
+                begin
+                    tmp__demux_1_0_reg = 1'b0;
+                    tmp__demux_1_1_reg = 1'b0;
+                    tmp__demux_1_2_reg = 1'b0;
+                    tmp__demux_1_3_reg = 1'b0;
+                    tmp__demux_1_4_reg = 1'b0;
+                    tmp__demux_1_5_reg = 1'b0;
+                    tmp__demux_1_6_reg = Net_438;
+                    tmp__demux_1_7_reg = 1'b0;
+                end
+                3'b111:
+                begin
+                    tmp__demux_1_0_reg = 1'b0;
+                    tmp__demux_1_1_reg = 1'b0;
+                    tmp__demux_1_2_reg = 1'b0;
+                    tmp__demux_1_3_reg = 1'b0;
+                    tmp__demux_1_4_reg = 1'b0;
+                    tmp__demux_1_5_reg = 1'b0;
+                    tmp__demux_1_6_reg = 1'b0;
+                    tmp__demux_1_7_reg = Net_438;
                 end
             endcase
         end
-        assign Net_444 = tmp__demux_1_0_reg;
-        assign Net_441 = tmp__demux_1_1_reg;
-        assign Net_449 = tmp__demux_1_2_reg;
-        assign Net_443 = tmp__demux_1_3_reg;
+        assign Net_590 = tmp__demux_1_0_reg;
+        assign Net_591 = tmp__demux_1_1_reg;
+        assign Net_592 = tmp__demux_1_2_reg;
+        assign Net_594 = tmp__demux_1_3_reg;
+        assign Net_596 = tmp__demux_1_4_reg;
+        assign Net_443 = tmp__demux_1_5_reg;
+        assign Net_588 = tmp__demux_1_6_reg;
+        assign Net_589 = tmp__demux_1_7_reg;
     end
     // -- De Mux end --
 
@@ -819,7 +1007,7 @@ module top ;
         .control_7(Net_581),
         .clock(1'b0),
         .reset(1'b0),
-        .control_bus(mywire_1[1:0]));
+        .control_bus(mywire_1[2:0]));
     defparam SS.Bit0Mode = 0;
     defparam SS.Bit1Mode = 0;
     defparam SS.Bit2Mode = 0;
@@ -831,7 +1019,7 @@ module top ;
     defparam SS.BitValue = 0;
     defparam SS.BusDisplay = 1;
     defparam SS.ExtrReset = 0;
-    defparam SS.NumOutputs = 2;
+    defparam SS.NumOutputs = 3;
 
 	wire [0:0] tmpOE__Pin_1_net;
 	wire [0:0] tmpFB_0__Pin_1_net;
@@ -1113,16 +1301,120 @@ module top ;
     assign Net_438 = ~Net_439;
 
 
-    assign Net_419 = ~Net_444;
+    assign Net_419 = ~Net_590;
 
 
-    assign Net_422 = ~Net_441;
+    assign Net_422 = ~Net_591;
 
 
-    assign Net_428 = ~Net_449;
+    assign Net_428 = ~Net_592;
 
 
-    assign Net_425 = ~Net_443;
+    assign Net_425 = ~Net_594;
+
+	wire [0:0] tmpOE__Pin_5_net;
+	wire [0:0] tmpFB_0__Pin_5_net;
+	wire [0:0] tmpIO_0__Pin_5_net;
+	wire [0:0] tmpINTERRUPT_0__Pin_5_net;
+	electrical [0:0] tmpSIOVREF__Pin_5_net;
+
+	cy_psoc3_pins_v1_10
+		#(.id("f04dd9ba-954e-4352-a3f2-4deb8634d958"),
+		  .drive_mode(3'b010),
+		  .ibuf_enabled(1'b1),
+		  .init_dr_st(1'b1),
+		  .input_clk_en(0),
+		  .input_sync(1'b1),
+		  .input_sync_mode(1'b0),
+		  .intr_mode(2'b00),
+		  .invert_in_clock(0),
+		  .invert_in_clock_en(0),
+		  .invert_in_reset(0),
+		  .invert_out_clock(0),
+		  .invert_out_clock_en(0),
+		  .invert_out_reset(0),
+		  .io_voltage(""),
+		  .layout_mode("CONTIGUOUS"),
+		  .oe_conn(1'b0),
+		  .oe_reset(0),
+		  .oe_sync(1'b0),
+		  .output_clk_en(0),
+		  .output_clock_mode(1'b0),
+		  .output_conn(1'b1),
+		  .output_mode(1'b0),
+		  .output_reset(0),
+		  .output_sync(1'b0),
+		  .pa_in_clock(-1),
+		  .pa_in_clock_en(-1),
+		  .pa_in_reset(-1),
+		  .pa_out_clock(-1),
+		  .pa_out_clock_en(-1),
+		  .pa_out_reset(-1),
+		  .pin_aliases(""),
+		  .pin_mode("O"),
+		  .por_state(4),
+		  .use_annotation(1'b0),
+		  .sio_group_cnt(0),
+		  .sio_hyst(1'b0),
+		  .sio_ibuf(""),
+		  .sio_info(2'b00),
+		  .sio_obuf(""),
+		  .sio_refsel(""),
+		  .sio_vtrip(""),
+		  .slew_rate(1'b0),
+		  .spanning(0),
+		  .vtrip(2'b10),
+		  .width(1))
+		Pin_5
+		 (.oe(tmpOE__Pin_5_net),
+		  .y({Net_585}),
+		  .fb({tmpFB_0__Pin_5_net[0:0]}),
+		  .io({tmpIO_0__Pin_5_net[0:0]}),
+		  .siovref(tmpSIOVREF__Pin_5_net),
+		  .interrupt({tmpINTERRUPT_0__Pin_5_net[0:0]}),
+		  .in_clock({1'b0}),
+		  .in_clock_en({1'b1}),
+		  .in_reset({1'b0}),
+		  .out_clock({1'b0}),
+		  .out_clock_en({1'b1}),
+		  .out_reset({1'b0}));
+
+	assign tmpOE__Pin_5_net = (`CYDEV_CHIP_MEMBER_USED == `CYDEV_CHIP_MEMBER_3A && `CYDEV_CHIP_REVISION_USED < `CYDEV_CHIP_REVISION_3A_ES3) ? ~{1'b1} : {1'b1};
+
+
+    assign Net_585 = ~Net_596;
+
+    ZeroTerminal ZeroTerminal_3 (
+        .z(Net_12));
+
+    Timer_v2_50_3 Timer_1 (
+        .reset(Net_12),
+        .interrupt(Net_663),
+        .enable(1'b1),
+        .trigger(1'b0),
+        .capture(1'b0),
+        .capture_out(Net_667),
+        .tc(Net_668),
+        .clock(Net_10));
+    defparam Timer_1.CaptureCount = 2;
+    defparam Timer_1.CaptureCounterEnabled = 0;
+    defparam Timer_1.DeviceFamily = "PSoC5";
+    defparam Timer_1.InterruptOnCapture = 0;
+    defparam Timer_1.InterruptOnTC = 0;
+    defparam Timer_1.Resolution = 16;
+    defparam Timer_1.SiliconRevision = "1";
+
+
+	cy_clock_v1_0
+		#(.id("c0fb34bd-1044-4931-9788-16b01ce89812"),
+		  .source_clock_id("315365C3-2E3E-4f04-84A2-BB564A173261"),
+		  .divisor(0),
+		  .period("0"),
+		  .is_direct(1),
+		  .is_digital(1))
+		timer_clock
+		 (.clock_out(Net_10));
+
 
 
 

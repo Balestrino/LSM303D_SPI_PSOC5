@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: m_mosi_pin.c  
-* Version 1.80
+* Version 1.90
 *
 * Description:
 *  This file contains API to enable firmware control of a Pins component.

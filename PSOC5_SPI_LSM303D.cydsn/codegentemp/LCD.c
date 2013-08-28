@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: LCD.c
-* Version 1.80
+* Version 1.90
 *
 * Description:
 *  This file provides source code for the Character LCD component's API.
@@ -56,13 +56,13 @@ void LCD_Init(void)
 {
     /* INIT CODE */
     CyDelay(40u);                                                        /* Delay 40 ms */
-    LCD_WrCntrlNib(LCD_DISPLAY_8_BIT_INIT);   /* Selects 8-bit mode */
+    LCD_WrCntrlNib(LCD_DISPLAY_8_BIT_INIT);    /* Selects 8-bit mode */
     CyDelay(5u);                                                         /* Delay 5 ms */
-    LCD_WrCntrlNib(LCD_DISPLAY_8_BIT_INIT);   /* Selects 8-bit mode */
+    LCD_WrCntrlNib(LCD_DISPLAY_8_BIT_INIT);    /* Selects 8-bit mode */
     CyDelay(15u);                                                        /* Delay 15 ms */
-    LCD_WrCntrlNib(LCD_DISPLAY_8_BIT_INIT);   /* Selects 8-bit mode */
+    LCD_WrCntrlNib(LCD_DISPLAY_8_BIT_INIT);    /* Selects 8-bit mode */
     CyDelay(1u);                                                         /* Delay 1 ms */
-    LCD_WrCntrlNib(LCD_DISPLAY_4_BIT_INIT);   /* Selects 4-bit mode */
+    LCD_WrCntrlNib(LCD_DISPLAY_4_BIT_INIT);    /* Selects 4-bit mode */
     CyDelay(5u);                                                         /* Delay 5 ms */
 
     LCD_WriteControl(LCD_CURSOR_AUTO_INCR_ON);    /* Incr Cursor After Writes */
@@ -358,7 +358,7 @@ void LCD_IsReady(void)
     #if (CY_PSOC4)
         
         /* Mask off data pins to clear old values out */
-        value = LCD_PORT_PC_REG & ((uint8)(~ LCD_DM_DATA_MASK));
+        value = LCD_PORT_PC_REG & ((uint32) (~ LCD_DM_DATA_MASK));
         /* Load in high Z values for data pins, others unchanged */
         LCD_PORT_PC_REG = value | LCD_HIGH_Z_DATA_DM;
 
@@ -405,6 +405,9 @@ void LCD_IsReady(void)
 
         /* Set enable low */
         LCD_PORT_DR_REG &= ((uint8)(~LCD_E));
+
+        /* This gives a true delay between disably Enable bit and poling Ready bit */
+        CyDelayUs(0u);
 
         /* Extract ready bit */
         value &= LCD_READY_BIT;

@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: CyFlash.c
-* Version 3.30
+* Version 3.40
 *
 *  Description:
 *   Provides an API for the FLASH/EEPROM.
@@ -13,7 +13,7 @@
 *   System Reference Guide provided with PSoC Creator.
 *
 ********************************************************************************
-* Copyright 2008-2012, Cypress Semiconductor Corporation. All rights reserved.
+* Copyright 2008-2013, Cypress Semiconductor Corporation. All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
 * the software package with which this file was provided.
@@ -364,7 +364,7 @@ cystatus CySetFlashEEBuffer(uint8 * buffer)
 
         /* Copy the rowdata to the temporary buffer. */
         #if(CY_PSOC3)
-            (void) memcpy((void *) rowBuffer, (const void *) rowData, (int16) CYDEV_FLS_ROW_SIZE);
+            (void) memcpy((void *) rowBuffer, (void *)((uint32) rowData), (int16) CYDEV_FLS_ROW_SIZE);
         #else
             (void) memcpy((void *) rowBuffer, (const void *) rowData, CYDEV_FLS_ROW_SIZE);
         #endif  /* (CY_PSOC3) */
@@ -403,15 +403,19 @@ cystatus CySetFlashEEBuffer(uint8 * buffer)
     *   CYRET_UNKNOWN if there was an SPC error.
     *
     *******************************************************************************/
-    cystatus CyWriteRowConfig(uint8 arrayId, uint16 rowAddress, uint8 * rowECC) 
+    cystatus CyWriteRowConfig(uint8 arrayId, uint16 rowAddress, const uint8 * rowECC) 
     {
         uint32 offset;
         uint16 i;
         cystatus status;
 
         /* Read the existing flash data. */
-        offset = CYDEV_FLS_BASE + ((uint32) arrayId * CYDEV_FLS_SECTOR_SIZE) +
+        offset = ((uint32) arrayId * CYDEV_FLS_SECTOR_SIZE) +
             ((uint32) rowAddress * CYDEV_FLS_ROW_SIZE);
+            
+        #if (CYDEV_FLS_BASE != 0u)
+            offset += CYDEV_FLS_BASE;
+        #endif
 
         for (i = 0u; i < CYDEV_FLS_ROW_SIZE; i++)
         {
@@ -419,9 +423,9 @@ cystatus CySetFlashEEBuffer(uint8 * buffer)
         }
 
         #if(CY_PSOC3)
-            (void) memcpy((void *) &rowBuffer[CYDEV_FLS_ROW_SIZE], (void *) rowECC, (int16) CYDEV_ECC_ROW_SIZE);
+            (void) memcpy((void *) &rowBuffer[CYDEV_FLS_ROW_SIZE], (void *)((uint32)rowECC), (int16) CYDEV_ECC_ROW_SIZE);
         #else
-            (void) memcpy((void *) &rowBuffer[CYDEV_FLS_ROW_SIZE], (void *) rowECC, CYDEV_ECC_ROW_SIZE);
+            (void) memcpy((void *) &rowBuffer[CYDEV_FLS_ROW_SIZE], (const void *) rowECC, CYDEV_ECC_ROW_SIZE);
         #endif  /* (CY_PSOC3) */
 
         status = CyWriteRowFull(arrayId, rowAddress, rowBuffer, CYDEV_FLS_ROW_SIZE + CYDEV_ECC_ROW_SIZE);

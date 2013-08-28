@@ -1,6 +1,6 @@
 /*******************************************************************************
 * File Name: CyDmac.c
-* Version 3.30
+* Version 3.40
 *
 * Description:
 *  Provides an API for the DMAC component. The API includes functions for the
@@ -21,7 +21,7 @@
 *  The user can over write this once the TD is allocated.
 *
 ********************************************************************************
-* Copyright 2008-2012, Cypress Semiconductor Corporation.  All rights reserved.
+* Copyright 2008-2013, Cypress Semiconductor Corporation.  All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
 * the software package with which this file was provided.
@@ -570,7 +570,8 @@ cystatus CyDmaChGetRequest(uint8 chHandle)
 
     if(chHandle < CY_DMA_NUMBEROF_CHANNELS)
     {
-        status = (cystatus) (CY_DMA_CH_STRUCT_PTR[chHandle].action[0u] & (CY_DMA_CPU_REQ | CY_DMA_CPU_TERM_TD | CY_DMA_CPU_TERM_CHAIN));
+        status = (cystatus) ((uint32)CY_DMA_CH_STRUCT_PTR[chHandle].action[0u] & 
+                            (uint32)(CY_DMA_CPU_REQ | CY_DMA_CPU_TERM_TD | CY_DMA_CPU_TERM_CHAIN));
     }
 
     return(status);
@@ -818,32 +819,36 @@ uint8 CyDmaTdFreeCount(void)
 *  uint8 nextTd:
 *   Zero based index of the next Transfer Descriptor in the TD chain. Zero is a
 *   valid pointer to the next TD; DMA_END_CHAIN_TD is the end of the chain.
+*   DMA_DISABLE_TD indicates an end to the chain and the DMA is disabled. No
+*   further TDs are fetched. DMA_DISABLE_TD is only supported on PSoC3 and
+*   PSoC 5LP silicons.
 *
 *  uint8 configuration:
 *   Stores the Bit field of configuration bits.
 *
-*   TD_SWAP_EN         - Perform endian swap
+*   CY_DMA_TD_SWAP_EN        - Perform endian swap
 *
-*   TD_SWAP_SIZE4      - Swap size = 4 bytes
+*   CY_DMA_TD_SWAP_SIZE4     - Swap size = 4 bytes
 *
-*   TD_AUTO_EXEC_NEXT  - The next TD in the chain will trigger automatically
-*                        when the current TD completes.
+*   CY_DMA_TD_AUTO_EXEC_NEXT - The next TD in the chain will trigger
+*                              automatically when the current TD completes.
 *
-*   TD_TERMIN_EN       - Terminate this TD if a positive edge on the trq input
-*                        line occurs. The positive edge must occur during a
-*                        burst. That is the only time the DMAC will listen for
-*                        it.
+*   CY_DMA_TD_TERMIN_EN      - Terminate this TD if a positive edge on the trq
+*                              input line occurs. The positive edge must occur
+*                              during a burst. That is the only time the DMAC
+*                              will listen for it.
 *
-*   DMA__TD_TERMOUT_EN - When this TD completes, the TERMOUT signal will
-*                        generate a pulse. Note that this option is instance
-*                        specific with the instance name followed by two
-*                        underscores. In this example, the instance name is DMA.
+*   DMA__TD_TERMOUT_EN       - When this TD completes, the TERMOUT signal will
+*                              generate a pulse. Note that this option is
+*                              instance specific with the instance name followed
+*                              by two underscores. In this example, the instance
+*                              name is DMA.
 *
-*   TD_INC_DST_ADR     - Increment DST_ADR according to the size of each data
-*                        transaction in the burst.
+*   CY_DMA_TD_INC_DST_ADR    - Increment DST_ADR according to the size of each
+*                              data transaction in the burst.
 *
-*   TD_INC_SRC_ADR     - Increment SRC_ADR according to the size of each data
-*                        transaction in the burst.
+*   CY_DMA_TD_INC_SRC_ADR    - Increment SRC_ADR according to the size of each
+*                              data transaction in the burst.
 *
 * Return:
 *  CYRET_SUCCESS if successful.

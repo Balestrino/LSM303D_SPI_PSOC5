@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <pindata xsi:schemaLocation="http://cypress.com/xsd/cypindata_v2 ../../dtd/cypindata_v2.xsd" family="PSoC5_Panther" package="100-TQFP" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://cypress.com/xsd/cypindata_v2">
   <capabilities>
-    <capability name="NONE" value="0x0000000000000000" />
     <capability name="DIGITAL" value="0x0000000000000001" />
     <capability name="ANALOG" value="0x0000000000000002" />
     <capability name="GPIO" value="0x0000000000000004" />
@@ -45,6 +44,8 @@
     <capability name="SCB_UART_TX" value="0x0000010000000000" />
     <capability name="ROUTABLE" value="0x0000020000000000" />
     <capability name="TRUETOUCH" value="0x0000040000000000" />
+    <capability name="LCD_COM" value="0x0000080000000000" />
+    <capability name="LCD_SEG" value="0x0000100000000000" />
   </capabilities>
   <pins>
     <pin number="1" name="P2[5]" pinSide="WEST" padSide="SOUTH" portId="2" pinId="5" ioSupplyPin="Vio2" ioSupplyPinNo="100" capabilities="0x0000020000000007" />

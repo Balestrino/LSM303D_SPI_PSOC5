@@ -1,6 +1,6 @@
 /*******************************************************************************
 * FILENAME: cytypes.h
-* Version 3.30
+* Version 3.40
 *
 *  Description:
 *  CyTypes provides register access macros and approved types for use in
@@ -17,7 +17,7 @@
 *  (i.e. a "uint8 *" shouldn't be passed to obtain a 16-bit register value)
 *
 ********************************************************************************
-* Copyright 2008-2012, Cypress Semiconductor Corporation.  All rights reserved.
+* Copyright 2008-2013, Cypress Semiconductor Corporation.  All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
 * the software package with which this file was provided.
@@ -83,7 +83,9 @@ typedef          float  float32;
 
 #if(!CY_PSOC3)
 
-    typedef      double float64;
+    typedef               double float64;
+    typedef          long long   int64;
+    typedef unsigned long long   uint64;
 
 #endif  /* (!CY_PSOC3) */
 
@@ -167,6 +169,8 @@ typedef          char   char8;
     #define CYSMALL     small
     #define CYXDATA     xdata
     #define XDATA       xdata
+    
+    #define CY_NOINIT
 
 #else
 
@@ -183,6 +187,13 @@ typedef          char   char8;
     #define CYSMALL
     #define CYXDATA
     #define XDATA
+    
+    #if defined(__ARMCC_VERSION)
+        #define CY_NOINIT __attribute__ ((section(".noinit"), zero_init))
+    #elif defined (__GNUC__)
+        #define CY_NOINIT __attribute__ ((section(".noinit")))
+    #endif  /* (__ARMCC_VERSION) */
+
 
 #endif  /* (CY_PSOC3) */
 
@@ -254,17 +265,17 @@ typedef volatile uint32 CYXDATA reg32;
     #define CY_SET_REG32(addr, value)       cywrite32_nodpx((volatile void far *)(reg32 *)(addr), value)
 
     /* Access 8, 16, 24 and 32-bit registers, ABOVE THE FIRST 64K OF XDATA */
-    #define CY_GET_XTND_REG8(addr)          cyread8(addr)
-    #define CY_SET_XTND_REG8(addr, value)   cywrite8(addr,value)
+    #define CY_GET_XTND_REG8(addr)          cyread8((volatile void far *)(addr))
+    #define CY_SET_XTND_REG8(addr, value)   cywrite8((volatile void far *)(addr), value)
 
-    #define CY_GET_XTND_REG16(addr)         cyread16(addr)
-    #define CY_SET_XTND_REG16(addr, value)  cywrite16(addr,value)
+    #define CY_GET_XTND_REG16(addr)         cyread16((volatile void far *)(addr))
+    #define CY_SET_XTND_REG16(addr, value)  cywrite16((volatile void far *)(addr), value)
 
-    #define CY_GET_XTND_REG24(addr)         cyread24(addr)
-    #define CY_SET_XTND_REG24(addr, value)  cywrite24(addr,value)
+    #define CY_GET_XTND_REG24(addr)         cyread24((volatile void far *)(addr))
+    #define CY_SET_XTND_REG24(addr, value)  cywrite24((volatile void far *)(addr), value)
 
-    #define CY_GET_XTND_REG32(addr)         cyread32(addr)
-    #define CY_SET_XTND_REG32(addr, value)  cywrite32(addr,value)
+    #define CY_GET_XTND_REG32(addr)         cyread32((volatile void far *)(addr))
+    #define CY_SET_XTND_REG32(addr, value)  cywrite32((volatile void far *)(addr), value)
 
 #else
 
