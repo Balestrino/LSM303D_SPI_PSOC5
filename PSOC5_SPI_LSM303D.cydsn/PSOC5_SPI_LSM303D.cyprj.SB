@@ -33,6 +33,8 @@
 <dep name=".\Generated_Source\PSoC5\Pin_5_aliases.h" />
 <dep name=".\Generated_Source\PSoC5\Pin_6.h" />
 <dep name=".\Generated_Source\PSoC5\Pin_6_aliases.h" />
+<dep name=".\Generated_Source\PSoC5\Pin_7.h" />
+<dep name=".\Generated_Source\PSoC5\Pin_7_aliases.h" />
 <dep name=".\Generated_Source\PSoC5\SPIM.h" />
 <dep name=".\Generated_Source\PSoC5\SPIM_IntClock.h" />
 <dep name=".\Generated_Source\PSoC5\SPIM_PVT.h" />
@@ -78,6 +80,8 @@
 <file name=".\Generated_Source\PSoC5\Pin_5_aliases.h" />
 <file name=".\Generated_Source\PSoC5\Pin_6.h" />
 <file name=".\Generated_Source\PSoC5\Pin_6_aliases.h" />
+<file name=".\Generated_Source\PSoC5\Pin_7.h" />
+<file name=".\Generated_Source\PSoC5\Pin_7_aliases.h" />
 <file name=".\Generated_Source\PSoC5\SPIM.h" />
 <file name=".\Generated_Source\PSoC5\SPIM_IntClock.h" />
 <file name=".\Generated_Source\PSoC5\SPIM_PVT.h" />
@@ -273,6 +277,17 @@
 <dep name=".\Generated_Source\PSoC5\Pin_6.c" />
 </file>
 <file name=".\Generated_Source\PSoC5\Pin_6.c" />
+<file name=".\ARM_GCC_441\Debug\Pin_7.o">
+<dep name=".\Generated_Source\PSoC5\Pin_7.h" />
+<dep name=".\Generated_Source\PSoC5\Pin_7_aliases.h" />
+<dep name=".\Generated_Source\PSoC5\cydevice.h" />
+<dep name=".\Generated_Source\PSoC5\cydevice_trm.h" />
+<dep name=".\Generated_Source\PSoC5\cyfitter.h" />
+<dep name=".\Generated_Source\PSoC5\cypins.h" />
+<dep name=".\Generated_Source\PSoC5\cytypes.h" />
+<dep name=".\Generated_Source\PSoC5\Pin_7.c" />
+</file>
+<file name=".\Generated_Source\PSoC5\Pin_7.c" />
 <file name=".\ARM_GCC_441\Debug\SPIM.o">
 <dep name=".\Generated_Source\PSoC5\CyFlash.h" />
 <dep name=".\Generated_Source\PSoC5\CyLib.h" />
@@ -531,6 +546,7 @@
 <dep name=".\ARM_GCC_441\Debug\Pin_6.o" />
 <dep name=".\ARM_GCC_441\Debug\Timer_1.o" />
 <dep name=".\ARM_GCC_441\Debug\Timer_1_PM.o" />
+<dep name=".\ARM_GCC_441\Debug\Pin_7.o" />
 <dep name=".\ARM_GCC_441\Debug\cyfitter_cfg.o" />
 <dep name=".\ARM_GCC_441\Debug\PSOC5_SPI_LSM303D.a" />
 <dep name="${CyRoot}\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CortexM3\ARM_GCC_441\Debug\CyComponentLibrary.a" />
@@ -581,6 +597,7 @@
 <name_val_pair name=".\Generated_Source\PSoC5\Timer_1.c" v="&quot;-I. &quot;&quot;-Wno-main &quot;&quot;-I./Generated_Source/PSoC5 &quot;&quot;-mcpu=cortex-m3 &quot;&quot;-mthumb &quot;&quot;-g &quot;&quot;-Wa,-alh=${OutputDir}\${CompileFile}.lst &quot;&quot;-Os &quot;&quot;-ffunction-sections &quot;" />
 <name_val_pair name=".\Generated_Source\PSoC5\Timer_1_PM.c" v="&quot;-I. &quot;&quot;-Wno-main &quot;&quot;-I./Generated_Source/PSoC5 &quot;&quot;-mcpu=cortex-m3 &quot;&quot;-mthumb &quot;&quot;-g &quot;&quot;-Wa,-alh=${OutputDir}\${CompileFile}.lst &quot;&quot;-Os &quot;&quot;-ffunction-sections &quot;" />
 <name_val_pair name=".\Generated_Source\PSoC5\Pin_6.c" v="&quot;-I. &quot;&quot;-Wno-main &quot;&quot;-I./Generated_Source/PSoC5 &quot;&quot;-mcpu=cortex-m3 &quot;&quot;-mthumb &quot;&quot;-g &quot;&quot;-Wa,-alh=${OutputDir}\${CompileFile}.lst &quot;&quot;-Os &quot;&quot;-ffunction-sections &quot;" />
+<name_val_pair name=".\Generated_Source\PSoC5\Pin_7.c" v="&quot;-I. &quot;&quot;-Wno-main &quot;&quot;-I./Generated_Source/PSoC5 &quot;&quot;-mcpu=cortex-m3 &quot;&quot;-mthumb &quot;&quot;-g &quot;&quot;-Wa,-alh=${OutputDir}\${CompileFile}.lst &quot;&quot;-Os &quot;&quot;-ffunction-sections &quot;" />
 </name>
 </genericCmdLineData>
 <codeGenCmdLineTag v="&quot;-.appdatapath&quot; &quot;C:\Users\SB\AppData\Local\Cypress Semiconductor\PSoC Creator\2.2&quot; &quot;-.fdsnotice&quot; &quot;-.fdswarpdepfile=warp_dependencies.txt&quot; &quot;-.fdselabdepfile=elab_dependencies.txt&quot; &quot;-.fdsbldfile=generated_files.txt&quot; &quot;-p&quot; &quot;C:\Users\SB\Dropbox\CentroPiaggio\LSM303D\LSM303D_SPI_PSOC5\PSOC5_SPI_LSM303D.cydsn\PSOC5_SPI_LSM303D.cyprj&quot; &quot;-d&quot; &quot;CY8C5568AXI-060&quot; &quot;-s&quot; &quot;C:\Users\SB\Dropbox\CentroPiaggio\LSM303D\LSM303D_SPI_PSOC5\PSOC5_SPI_LSM303D.cydsn\Generated_Source\PSoC5&quot; &quot;--&quot; &quot;-yv2&quot; &quot;-v5&quot; &quot;-yga&quot; &quot;-q10&quot; &quot;-o2&quot; &quot;-.fftcfgtype=LE&quot; " />
